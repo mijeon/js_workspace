@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슈렉갤러리</title>
+    <style>
+        #wrapper{
+            width: 500px;
+            height: 400px;
+            background-color: yellowgreen;
+            margin:auto;
+        }
+        #content{
+            width: 100%;
+            height: 340px;
+            background-color: beige;
+            position: relative;  /*4-1) 자식 때문에 명시*/  
+            overflow: hidden;
+        }
+        #control{
+            width: 100%;
+            height: 60px;
+            background-color: rgb(28, 63, 31);
+            text-align: center;  /*11-4*/
+        }
+        #control a{  /*11-6-1*/
+            text-decoration: none;  /*링크에 의해 생성된 밑줄 제거*/
+        }
+    </style>
+    <script>
+        let box;  //9-2) 7개의 이미지를 통째로 안고있을 div 
+        let a=0.1;  //12-1
+        let targetX=0;  //12-1
+        //4데이터에는 규칙이 없다는 전제하에 개발
+        let nameArray=["img0.jpg", "img1.jpg", "img2.jpg", "img3.jpg", "img4.jpg", "img5.jpg", "img6.jpg"];
+        //프로그램에서 변화 가능성이 없는 데이터일 경우 변수 아닌 실수를
+        //주로 사용한다.  js에서는  const 선언 시 반드시 초기화가 강제됨
+        const IMG_WIDTH=500;  //6) 이미지 한개당 너비
+        const IMG_HEIGHT=340;  //이미지 한개당 높이
+       
+        //이미지 생성하기 
+        function createImg(){  //3 
+            for(let i=0;i<nameArray.length;i++){  //10) 이미지 여러개 생성하기 위한 반복문으로 초기값을 i로 변경
+                let img=document.createElement("img");  //9
+                img.src="../images/shurek/"+nameArray[i];
+                img.style.position="absolute";
+                img.style.left=(i*IMG_WIDTH)+"px";
+                img.style.width=IMG_WIDTH+"px";
+                img.style.height=IMG_HEIGHT+"px";
+
+            //9-3) 슈렉이미지 박스에 부착
+            box.appendChild(img);
+            }     
+        }
+
+        //11-7) 원하는 이미지 보여주기
+        function move(x){
+            //0버튼 : -0, 1버튼 : -500, 2버튼 : -1000
+            //12) 박스의 left값은 =박스위치+비율계수*(목표지점-현재 박스위치)  //초기값에 대입
+            box.style.left=parseFloat(box.style.left)+a*(targetX-parseFloat(box.style.left))+"px";  //11-7/11-8)초기값 대신 변수로
+        }
+        function setTarget(x){  //13
+            targetX=x;
+        }
+        //11) 네비게이션 만들기
+        function createNav(){
+            //div-block, span-inline (너비, 높이 적용 불가)
+           for(let i=0;i<nameArray.length;i++){  //11-4
+                let dot=document.createElement("a");  //<a></a>
+                dot.innerText="●";
+                dot.style.fontSize=30+"px";  //11-3
+                dot.style.color="orange";  //11-3
+                dot.style.margin=7+"px";  //11-5
+                //11-6 <a herf="javascrip"></a>  //11-8 초기값 대신 변수로
+                dot.href="javascript:setTarget("+(-IMG_WIDTH*i)+")";  
+            
+                //11-1)control div에 부착
+                let control=document.getElementById("control");
+                control.appendChild(dot);
+           }           
+        }
+        function init(){  //2
+            //4) 슈렉 이미지들을 탑재할 div 생성
+            box=document.createElement("div");  //9-1) 전역변수 선언
+            box.style.width=IMG_WIDTH*nameArray.length+"px";  //7
+            box.style.height=IMG_HEIGHT+"px";
+            box.style.background="gray";
+            box.style.position="absolute";  //content div의 자식이 될거임
+            box.style.left=0+"px";
+
+            //8) content에 box 부착
+            let content=document.getElementById("content");
+            content.appendChild(box);
+        }
+        window.addEventListener("load", function(){  //1
+            init();
+            createImg();  //8) 초기화 이후에 이미지를 생성하기 위해
+            createNav();  //11-2
+
+            setInterval("move()", 10);  //12-1
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="content"></div>
+        <div id="control"></div>
+    </div>
+</body>
+</html>

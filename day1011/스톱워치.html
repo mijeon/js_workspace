@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:850px;
+            height:300;
+            background-color: rgb(191, 228, 181);
+            border: 5px solid rgb(131, 174, 238);
+            margin:auto;
+            text-align: center;
+            font-size:60px;
+            /* 현재 div 안의 내용물 간의 거리를 
+            증가시켜보자*/
+            padding-top: 25px;
+        }
+        #wrapper input{
+            width: 180px;
+            height: 200px;
+            font-size:70px;
+            border:2px solid orange;
+            text-align:right;
+        }
+        button{
+            width:200px;
+            height:50px;
+            font-size:45px;
+            margin-top:20px;
+        }
+    </style>
+    <script>
+        var sec=0;  //초를 누적시킬 전역변수
+        var min=0;  //분을 누적시킬 전역변수
+        var hour=0;
+
+        function work(){
+            //버튼을 누를 때 마다  초의 값을 1증가 시키자
+            var t_sec=document.getElementById("t_sec");
+            var t_min=document.getElementById("t_min");
+            var t_hour=document.getElementById("t_hour");
+            sec+=1;
+            
+            //분에 대한 처리
+            if(sec>=60){
+                min++;
+                //초가 60에 도달하면, 다시 0으로 초기화
+                sec=0;
+            }
+            if(min>=60){
+                hour++;
+                //분이 60에 도달하면, 다시 0으로 초기화
+                min=0;
+            }
+            //setTimeout("work()", 1000);  
+            t_sec.value=sec;
+            t_min.value=min;
+            t_hour.value=hour;
+        }
+        function startTime(){
+            setInterval("work()", 1000);
+        }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <input type="text" value="0" id="t_hour">시
+        <input type="text" value="0" id="t_min">분
+        <input type="text" value="0" id="t_sec">초
+        <button onClick="startTime()">Start</button>
+    </div>
+</body>
+</html>

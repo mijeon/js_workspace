@@ -1,0 +1,97 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>이미지동적출력</title>
+<style>
+#wrapper{
+	width:700px;
+	height:700px;
+	background:#ffccff;
+	margin:auto;
+}
+#menu{
+	width:100%;
+	height:100px;
+	background:#ccccff;
+}
+#content{
+	width:100%;
+	height:600px;
+	background:gray;
+}
+/*선택자(selector)의 여러 표현 방법을 익혀보자
+   선택자(한칸 띄고) 자식선택자
+ */
+#menu img{ /*#menu 하위의 자식요소 중 img 요소들을 대상으로*/
+	width:70px;
+}
+#content img{
+	width:80px;
+}
+</style>
+<script>
+var food;  //출력할 이미지
+
+function setTable(){
+		//사용자가 선택한 이미지를 대상으로, 행과 열 수만큼 이미지를
+		//동적(실행시)으로 content라는 div 영역 안에 출력
+		var content=document.getElementById("content");
+		var tag="";
+		
+		//반복문을 수행하기 전에 사용자가 입력한 행, 열의 수를 조사하자	
+		var row=parseInt(document.getElementById("row").value);
+		var col=parseInt(document.getElementById("col").value);
+		
+			for(var a=1;a<=row;a++){  //행의 값을 가져와서 대입(층수)
+			
+				for(i=1;i<=col;i++){  //열의 값을 가져와서 대입(호수)
+				tag=tag+"<img src=\"../images/"+food+"\">";
+				}
+				tag=tag+"<br>";  //줄바꿈은 층수와 관련됨_for문 밖에 입력
+			}
+		content.innerHTML=tag;
+
+		//document.write("<img src=\"../images/fishcake.jpg\">");
+}
+var flag=false;  //첫번째 이미지를 위한 논리값
+
+
+function setImg1(){
+	food="fishcake.jpg";
+	
+
+}
+function setImg2(){
+	food="gimbap.jpg.";
+	
+
+}
+function setImg3(){
+	food="Tteokbokki.jpg.";
+
+}
+function setImg4(){
+	food="fry.jpg.";
+	
+}
+</script>
+</head>
+<body>
+	<div id="wrapper">
+	<div id="menu">
+		<img id="f1" src="../images/fishcake.jpg" onClick="setImg1()">
+		<img id="f2"src="../images/gimbap.jpg" onClick="setImg2()">
+		<img id="f3"src="../images/Tteokbokki.jpg" onClick="setImg3()">
+		<img id="f4"src="../images/fry.jpg" onClick="setImg4()">
+		<input type="text" placeholder="행의 개수 입력" size="10" id="row">
+		<input type="text" placeholder="열의 개수 입력" size="10" id="col">
+		<button onClick="setTable()">상차리기</button>
+	</div>		
+	<div id="content">출력 영역</div>
+	</div>	
+</body>
+</html>

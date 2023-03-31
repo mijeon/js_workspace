@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 700px;
+            height: 760px;
+            background-color: black;
+            margin: auto;
+        }
+        #control{
+            width: 100%;
+            height: 100px;
+            background-color: dimgrey;
+            font-size: 45px;
+            text-align: center;
+            border: 1px solid white;
+            color: white;
+        }
+        #day-area{
+            width: 100%;
+            height: 60px;
+            background-color: dimgrey;
+            border: 1px solid white;
+            color: white;
+        }
+        #day-area ul{
+            list-style: none;
+        }
+        #day-area li{
+            float: left;
+            width: 93px;
+            font-size: 30px;
+        }
+        #content{
+            width: 100%;
+            height: 600px;
+            background-color: dimgrey;
+            border: 1px solid white;
+            text-align: center;
+            position: relative;
+        }
+    </style>
+    <script src="./classes/Cell.js"></script>
+    <script src="../lib/util.js"></script>
+    <script>
+        let content;
+        let container;
+        let cellArr=[];  //3-1 달력에 셀을 담아둘 이차원배열
+        let dayText=["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];  
+        let dayTitle;
+        let current_yy;
+        let current_mm;  //현재 선택한 월
+
+        //2. 셀들을 담게될 컨테이너
+        function createContainer(){
+            container=document.createElement("div");
+            container.style.position="absolute";
+            container.style.left=0+"px";
+            container.style.top=0+"px";
+            container.style.width=714+"px";
+            container.style.height=612+"px";
+
+            content.appendChild(container);
+        }
+
+        //1 달력을 구성하는 cell들을 생성하자
+        function createCell(){
+            let num=0;
+            for(let i=0; i<6;i++){
+                let arr=[];  //3-2
+                for(let a=0; a<7;a++){
+                    num++;
+                    //constructor(container, x, y, width, height, num, msg)
+                    let cell=new Cell(container, a*100, i*100, 100, 100, num, num+"test");
+                    arr.push(cell);
+                }
+                cellArr.push(arr);  //이차원 배열에 일차원배열 채우기
+            }
+        }
+        
+        //3
+        //1) 해당 월은 무슨 요일부터 시작하는가
+        //월은 0부터 시작하므로 주의 0~11
+        function getStartDayOfWeek(year, month){  //year, menth, 1
+            //월의 시작 요일을 구하기 위해 날짜를 무조건 1로 세팅
+            let d=new Date(year, month); 
+            console.log("이번 달은", dayText[d.getDay()], "부터 시작합니다.");
+            return d.getDay();
+        }
+
+        //2) 해당 월은 며칠까지 있는가
+        // ex) 5월 달이 조사대상임
+        //getTotalDate();
+        function getTotalDate(year, month){
+            //1일 더하는 이유? 날짜를 0일로 세팅하기 위함
+            let d=new Date(year, month+1);
+            d.setDate(0);  //날짜를 이전 달의 마지막 날짜로 셋팅
+            console.log("해당월은", d.getDate(), "일까지 입니다.");
+            return d.getDate();
+        }
+
+        //4 이미 생성된 셀에 날짜 채우기
+        function printDate(year, month){
+            let d=new Date();  //프로그램이 가동되면 오늘날짜부터
+            //let year=d.getFullYear();  //현재 년도와 요일 표시됨
+            //let month=d.getMonth();
+
+            let startDay=getStartDayOfWeek(year, month);  //시작요일
+            let totalDate=getTotalDate(year, month);  //총 일수
+
+            let n=0;  //셀의 순서를 알려주는 변수 (날짜x)
+            let num=1;  //셀에 출력될 실제 날짜
+
+            for(let i=0;i<6;i++){
+                for(let a=0;a<7;a++){
+                    if(n>=startDay && num<=totalDate){  //해당 월의 시작요일부터
+                        cellArr[i][a].numDiv.innerText=num;
+                        cellArr[i][a].msgDiv.innerText=num+"일 일정";
+                        num++;
+                    }else{
+                        cellArr[i][a].numDiv.innerText=""
+                        cellArr[i][a].msgDiv.innerText="";
+                    }
+                    n++;  //0부터 찍음
+                }
+            }
+        }
+
+        //5 달력의 날짜 제목 출력
+        function printTitle(){
+            //printDate();
+            dayTitle.innerText=current_yy+"년"+getDateString((current_mm+1))+"월";  //월을 출력할 경우에만 +1
+        }
+
+        function prev(){
+            let d=new Date(current_yy, current_mm-1);  //생성자 년, 월
+            current_yy=d.getFullYear();
+            current_mm=d.getMonth();
+
+            printTitle();
+            printDate(current_yy, current_mm);  //년, 월
+        }
+        //5-1 지금 현재 월에 +1 증가
+        function next(){
+            //주의) 아래의 +1은 다음달 계산을 위한 1임 (출력X)
+            let d=new Date(current_yy, current_mm+1);  //생성자 년, 월
+            current_yy=d.getFullYear();
+            current_mm=d.getMonth();
+
+            printTitle();
+            printDate(current_yy, current_mm);  //년, 월
+        }
+
+        function init(){
+            content=document.getElementById("content");
+            dayTitle=document.getElementById("day-title");
+
+            createContainer();  
+            createCell();  
+
+            let d=new Date();  //현재날짜
+            current_yy=d.getFullYear();  //현재 년도 채우기
+            current_mm=d.getMonth();  //현재 월 채우기
+            printTitle();
+            printDate(current_yy, current_mm);   //d.getFullYear(), d.getMonth()
+
+            //5 버튼에 이벤트 연결
+            document.getElementById("bt-prev").addEventListener("click", function(){
+                prev();
+            });
+
+            document.getElementById("bt-next").addEventListener("click", function(){
+                next();
+            });
+        }
+
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="control">
+            <button id="bt-prev">이전</button>
+            <span id="day-title"></span>
+            <button id="bt-next">다음</button>
+        </div>
+        <div id="day-area">
+            <ul>
+                <li>Sun</li>
+                <li>Mon</li>
+                <li>Thus</li>
+                <li>Wed</li>
+                <li>Thur</li>
+                <li>Fri</li>
+                <li>Sat</li>
+            </ul>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

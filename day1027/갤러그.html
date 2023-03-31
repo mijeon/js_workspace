@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갤러그</title>
+    <style>
+        body{margin: 0px;}
+        #wrapper{
+            width: 1000px;
+            height: 800px;
+            background-image: url(../images/gallerxy/bg.png);
+            margin: auto;
+        }
+        #stage{
+            width: 100%;
+            height: 700px;
+            position: relative;
+            overflow: hidden;
+        }
+        #hp-area{
+            width: 100%;
+            height: 100px;
+        }
+    </style>
+    <script src="./classes/GameObject.js"></script>  <!--4-1-->
+    <script src="./classes/Hero.js"></script>  <!--2-1-->
+    <script src="./classes/Bullet.js"></script>  
+    <script src="./classes/Enemy.js"></script>  <!--8-1-->
+    <script>
+        let hero;  //2-3
+        let wrapper;
+        let stage;
+        let hpArea;
+        let bgY=0;  //배경을 움직이는 변수
+        let bgSpeed=1;  //배경 속도
+        let bulletArr=[];  //5-1
+        let gameFlag=true;  //6-1
+        let enemyNameArr=["blue_king.png", "green_king.png", "enemy1.png", "enemy2.png"];  //8-4
+        let enemyArr=[];  //8-4 곧 2차원 될 예정
+
+        //3 배경 효과
+        function bgEffect(){
+            bgY+=bgSpeed;
+            wrapper.style.backgroundPosition="0px "+bgY+"px";
+        }
+        //2-3 주인공 생성하기
+        function createHero(){
+            //2-5 constructor(container, src, x, y, width, height, velX, velY)
+            hero=new Hero(stage, "../images/gallerxy/ship.png", 450, 550, 50, 50, 0, 0);
+        }
+        //8-3 적군 생성하기
+        function crateEnemy(){
+            for(let i=0;i<4;i++){  
+                let Arr=[];  //층수만큼 1차원 배열을 만들기 위해 배열 선언
+                for(let a=0;a<20;a++){
+                    let enemy=new Enemy(stage, "../images/gallerxy/"+enemyNameArr[3], 110+a*40, 100+i*40, 38, 38, 0, 0);
+                    Arr.push(enemy);//집어넣는건 바깥쪽 영역이므로 push()
+                }
+                enemyArr.push(Arr);  //층수만큼 push()
+            }
+        }
+        //7 주인공 움직이기
+        function moveX(n){
+            hero.velX=n;
+        }
+        //5 총알 발사하기
+        function fire(){
+            bulletArr.push(new Bullet(stage, "../images/gallerxy/bullet.png", hero.x+(hero.width/3), hero.y-(20), 15, 20, 0, -10));
+        }
+        //1
+        function gameLoop(){
+            if(gameFlag){  //6 조건문
+                //console.log("gameLoop() called");
+                bgEffect();  //3-2
+
+                hero.tick();
+                hero.render();
+                
+                for(let i=0; i<bulletArr.length;i++){
+                    bulletArr[i].tick();
+                    bulletArr[i].render();
+                }
+            }
+            setTimeout("gameLoop()", 10)  //fps 결정
+        }
+        function init(){
+            wrapper=document.getElementById("wrapper");  //3-1
+            stage=document.getElementById("stage");  //2-4
+            hpArea=document.getElementById("hp-area");
+
+            createHero();  //2-2
+            crateEnemy();  //8-2
+            gameLoop();  //1-1
+
+
+            //4-2
+            document.body.addEventListener("keydown", function(e){
+                switch(e.keyCode){
+                    case 37:moveX(-5);break;
+                    case 39:moveX(5);break;
+                    case 32:fire();break;
+                    case 27: gameFlag=!gameFlag;break;  /*6-3 값 넣기 게임 pause/restart */
+                }
+            });
+
+            //6-4
+            document.body.addEventListener("keyup", function(e){
+                switch(e.keyCode){
+                    case 37:moveX(0);break;
+                    case 39:moveX(0);break;
+                }
+            });
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="stage"></div>
+        <div id="hp-area">대기 우주선 나올곳</div>
+    </div>
+</body>
+</html>

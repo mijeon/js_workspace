@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>롤러코스터</title>
+    <style>
+        body{margin: 0px;}
+        #section{
+            width: 1200px;
+            height: 650px;
+            margin: auto;
+            overflow: hidden;  /*자식 때문에*/
+        }
+        #wrapper{
+            width: 1000px;
+            height: 100%;
+            float: left;
+        }
+        #info{
+            width: 200px;
+            height: 100%;
+            background-color: beige;
+            float: left;
+            overflow: scroll;  /*5-7*/
+        }
+        #control{
+            width: 100%;
+            height: 50px;
+            background-color: skyblue;
+        }
+        #content{
+            width: 100%;
+            height: 600px;
+            background-image: url(../images/롤러코스터.png);
+            background-size: 100% 100%;
+            position: relative;
+            
+        }
+    </style>
+    <script>
+        let posArray=[];  //3-5 전역변수로 선언 length 0
+        let img;  //5-1 마리오 이미지 move()함수에서 사용하기 위해 전역변수로 선언
+        let n=0;  //5-3
+        let flag=false;  //5-4 move()
+
+        //2 주인공 생성하여 wrapper에 부착
+        function createIcon(){
+            img=document.createElement("img");  //5-1
+            img.src="../images/mario.png";
+            img.style.width=60+"px";
+            img.style.height=60+"px";
+            img.style.position="absolute";
+            img.style.left=0+"px";
+            img.style.top=450+"px";
+
+            //2-1
+            let content=document.getElementById("content");
+            content.appendChild(img);
+        }
+        //4 현재까지 누적된 좌표배열의 정보를 우측 정보창에 출력해보자
+        function printLog(){
+            let info=document.getElementById("info");  
+
+            //4-2 이차원 배열인 posArray에 들어있는 좌표 정보를 출력
+            //ex) [23, 67]
+            info.innerText="";  //4-3 기존의 출력물을 지우자
+
+            for(let i=0;i<posArray.length;i++){
+                let pos=posArray[i]  //이차원 배열에 들어있는 좌표배열 하나 추출 (일차원 배열)
+                //console.log("["+pos[0]+", "+pos[1]+"]");
+                
+                info.innerText=info.innerText+"["+pos[0]+", "+pos[1]+"]\n";  //text라서 <br>사용 못함
+            }
+        }
+        //3-1 마우스 클릭한 점의 좌표 정보를 보관 (데어터 수집)
+        //하나의 점은 x,y로 표현되므로 이 점을 둘다 보관할 일차원 배열을 생성하자
+        function getPos(ev){  //3-2 event 객체를 매개변수로 넘겨받자
+            let pos=[ev.layerX, ev.layerY];  //3-4
+            posArray.push(pos);  //3-6  이차원 배열이 됨
+            //console.log(posArray);  //3-7
+
+            //4-4 점을 시각적으로 표현
+            let dot=document.createElement("div");
+            dot.style.width=5+"px";
+            dot.style.height=5+"px";
+            dot.style.background="red";
+            dot.style.position="absolute";
+            dot.style.left=pos[0]+"px";
+            dot.style.top=pos[1]+"px";
+
+            let content=document.getElementById("content");
+            content.appendChild(dot);
+
+            printLog();  //4-1  오른쪽에 출력
+        }
+        //5 사용자가 수집한 db를 이용하여, 마리오를 그 좌표를 따라 움직이게 하자
+        function move(){
+            if(flag){  //5-5
+                img.style.left=posArray[n][0]+"px";  //5-2
+                img.style.top=posArray[n][1]+"px";  
+                n++;  //5-5
+                if(n>=posArray.length)flag=false;  //5-6
+            }
+        }
+        function start(){
+                flag=true;
+            }
+        function init(){
+            createIcon();  //2-2
+            setInterval("move()", 10);  //5-3 너무 빠르지 않게 반복하기 위해 setInterval() 사용
+
+            //3 content div에 mousedown 이벤트 연결하기
+            document.getElementById("content").addEventListener("mousedown", function(e){
+                //console.log("x=", e.layerX, "y=", e.layerY);  //e의 경우 문서 전체 좌표를 추출하므로 layerX를 써줌 //3-7 주석처리
+                getPos(e);  //3-3 e전달
+            });
+        }
+        //1
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="section">
+        <div id="wrapper">
+            <div id="control">
+                <button onClick="move()">Manual</button>
+                <button onClick="start()">Auto</button>
+                <button>Pause</button>
+            </div>
+            <div id="content"></div>
+        </div>
+        <div id="info"></div>
+    </div>    
+</body>
+</html>

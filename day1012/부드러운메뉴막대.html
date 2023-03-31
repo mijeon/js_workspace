@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부드러운메뉴막대</title>
+    <script>
+        var box;
+        var a=0.1;
+        var targetH=400;
+        var st;  //프로그램 실행중에 어느때라도 접근하기 위한 전역변수
+
+        function setSize(){  //막대가 도달할 목표높이
+
+            //녹색 막대의 스타일 중 높이값을 증가시키자(마우스 올릴 때)
+            //녹색 막대의 높이 = 기존 막대높이+a*(목표높이-기존 막대높이)
+            box.style.height=parseFloat(box.style.height)+a*(targetH-parseFloat(box.style.height))+"px";
+
+
+            box.innerText=parseFloat(box.style.height);
+
+            //녹색 막대의 스타일 중 높이값을 감소시키자(마우스 내릴 때)
+
+   
+        }
+        //마우스를 올려 놓으면, 사각막대의 목표지점을 400으로 주자
+        function rollOver(h){
+            targetH=h;
+         }
+        //  //마우스를 올려 놓으면, 사각막대의 목표지점을 45으로 주자
+        //  function rollOut(){
+        //     targetH=45;
+        // }   
+        //이 함수를 호출하면 setInterval() 작동시킬 것임
+        function startLoop(){
+             //사용자 대신 setSize() 지속적으로 자동호출해주는 함수 사용
+             st=setInterval("setSize()", 10);
+             //활성화의 의미로 빨간색 배경
+            box.style.background="lightsteelblue";
+        }
+        //실행중인 setInterval() 멈춰보자
+        function stopLoop(){
+            clearInterval(st);
+            box.style.background="#eeeeee";
+
+        }
+        function init(){
+            //CSS 적용을 style 태그에서 적용하지 않고, 순수 프로그램에서
+            //시도해보자
+            box=document.getElementById("box");  //var 제거
+            box.style.width=150+"px";
+            box.style.height=45+"px";
+            box.style.background="#eeeeee";
+
+            //위치설정
+            box.style.position="absolute";
+            box.style.left=500+"px";
+        }
+    </script>
+</head>
+<body onLoad="init()">
+    <button onClick="setSize()">수동</button>
+    <button onClick="startLoop()">엔진가동</button>
+    <button onClick="stopLoop()">엔진중지</button>
+    <div id="box" onMouseOver="rollOver(400)" onMouseOut="rollOver(45)"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*자바스크립트에 이미 내장되어진 객체 중 오늘은 Date 객체를 활용해보자*/ 
+        //우리와 같은 3rd 파티 개발자가 아닌, 언어를 만든 개발자들은,
+        //자신들이 제공하는 객체, 함수등에 대한 설명서를 제공함
+        //이러한 문서를 가리켜 api document 라 함
+        function getCurrent(){
+            let d=new Date();  //현재 날짜 객체 생성
+            console.log(d);
+            console.log("현재 연도는", d.getFullYear(), "년");
+            console.log("현재 월은", d.getMonth(), "월");
+            console.log("오늘은", d.getDate(), "일");
+            console.log("오늘은", d.getDay(), "요일");
+        }
+
+        //날짜 조작해보기
+        function test(){
+            let d=new Date();  //생성자(매개변수_년, 월, 일)
+            d.setDate(d.getDate()+100);  //오늘 날짜 + 100
+            console.log(d.getMonth(), "월", d.getDate(), "일");
+        }
+        //test();
+        
+        //날짜 객체를 서울올림픽이 개최된 해로 조작
+        //단, 생성자가 아닌 메서드로 조작하기
+        function test2(){
+            let d=new Date();
+            d.setFullYear(1988);  //메서드
+            console.log(d);
+        }
+        //test2();
+
+        //9월은 총 며칠까지 있을까
+        //Month의 경우 0~11
+        function test3(){
+            let d=new Date(2022, 9, 0);  //앞달 날짜가 0에 포함되므로 
+            console.log(d.getMonth(), "월");
+            console.log(d.getDate(), "일");
+            console.log(d.getDay(), "요일");  //2022, 9, 1
+        }
+        test3();
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>벽을튕기는공</title>
+</head>
+<style>
+    body{margin:0px;}
+</style>
+<script src="../lib/util.js"></script> <!--7-->
+<script src="./Ball.js"></script>  <!--4-1-->
+<script>
+    let wrapper;  //4-2 Ball.js에서 사용하기 위해 전역변수로 선언
+    let ball;  //5-9
+    let colorArr=["#FFB6C1", "#FFC0CB", "#FFE4E1", "#FFEBCD", "#FFFFE0", "#FFF8DC", "#FAEBD7", "#FAF0E6", "#FDF5E6", "#E0FFFF"];  //7-2
+    
+    //3
+    function createWall(){
+        //700x700
+        wrapper=document.getElementById("wrapper");
+        wrapper.style.width=700+"px";
+        wrapper.style.height=700+"px";
+        wrapper.style.margin="auto";
+        wrapper.style.border="2px solid powderblue";
+        wrapper.style.position="relative";
+        wrapper.style.overflow="hidden";  //5-5
+    }
+    //4 볼 인스턴스를 생성하여, 벽을 튕기면서 다니도록
+    function createBall(){
+        //constructor(x, y, width, height, color, velX, velY)
+        ball=new Ball(100, 50, 25, 25, colorArr[getRandom(colorArr.length)], getRandomWithRange(1,9), getRandomWithRange(1,9));  //4-4 매개변수 값 삽입  //5-8 변수명을 줌  //7-1랜덤함수 삽입
+    }
+    //2
+    function init(){
+        createWall();
+        //3-1 키보드 이벤트 연결하기
+        document.body.addEventListener("keydown", function(e){
+            console.log(e);
+
+            if(e.keyCode==32){  //space bar를 누르면
+                createBall();
+            }else if(e.keyCode==27){  //5-10 ESC를 누르면
+                ball.flag=!ball.flag;
+            }
+        });
+    }
+    //1
+    window.addEventListener("load", function(){
+        init();
+    });
+</script>
+<body>
+    <div id="wrapper"></div>
+</body>
+</html>

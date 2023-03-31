@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gallery</title>
+    <style>
+        #wrapper{
+            width: 600px;
+            height: 700px;
+            margin: auto;
+        }
+        #title-area{
+            width: 100%;
+            height: 100px;
+            background-color: steelblue;
+        }
+        #content{
+            width: 100%;
+            height: 500px;
+            background-color: whitesmoke;
+        }
+        #control{
+            width: 100%;
+            height: 100px;
+            background-color: steelblue;
+            text-align: center;
+        }
+    </style>
+    <script src="./marvel.js"></script>
+    <script>
+        let movie;
+        let index=0;  //json 배열을 접근하기 위한 변수
+
+        function getInfo(n){
+            movie=movies.marvel[n];  //매개변수
+            //제목 출력
+            document.getElementById("title-area").innerText=movie.title;
+
+            //이미지 출력
+            document.getElementById("pic").src=movie.url;
+        }
+        function init(){
+            getInfo(index);  //프로그램 가동하자마자 초기값
+
+            document.getElementById("bt-prev").addEventListener("click", function(){
+                index--;
+                getInfo(index);
+            });
+
+            document.getElementById("bt-next").addEventListener("click", function(){
+                index++;
+                getInfo(index);
+            });
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="title-area"></div>
+        <div id="content">
+            <img id="pic" width="100%" height="500px">
+        </div>
+        <div id="control">
+            <button id="bt-prev">이전</button>
+            <button id="bt-next">다음</button>
+        </div>
+    </div>
+</body>
+</html>

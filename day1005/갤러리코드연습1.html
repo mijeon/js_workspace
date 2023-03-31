@@ -1,0 +1,41 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script>
+	var x=1;
+	function next(){
+		//alert('다음');
+		x++;
+		x=(x>=10)?1:x;
+		document.querySelector("img").src="../images/m"+x+".jpg"
+		document.getElementById("num").innerText=x+"/10"
+	}
+	function prev(){
+		x--;
+		x=(x<=1)?10:x;
+		document.querySelector("img").src="../images/m"+x+".jpg"
+		document.getElementById("num").innertext=x+"/10"
+	}
+	</script>
+</head>
+<body>
+	<table width="600px" border="1px" align="center">
+		<tr>
+			<td align="center" id="num">1/10</td>
+		</tr>
+		<tr>
+			<td align="center"><img src="../images/m1.jpg" width="600px" height="400px"></td>
+		</tr>
+		<tr>
+			<td align="center">
+				<button onClick="prev()">이전</button>
+				<button onClick="next()">다음</button>
+			</td>
+		</tr>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+#wrapper{
+    width: 600px;
+    height: 500px;
+    background-color: yellow;
+    margin:auto;
+    overflow: hidden;  /*자식 요소가 떠있기 때문에*/
+}
+#thumb{
+    width:100px;
+    height: 100%;
+    background-color: burlywood;
+    float: left;
+    /* 넘쳐나는 컨텐츠에 대한 처리 결정 
+    overflow:hidden; 넘쳐나는 영역을 가려버림
+    overflow:scroll; 넘쳐나는 영역에 스크롤 처리
+    */
+    overflow:scroll;
+}
+#content{
+    width: 500px;
+    height: 100%;
+    background-color: beige;
+    float: left;
+}
+#thumb img{
+    width: 75px;
+    height: 75px;
+    border: 2px solid white;
+}
+</style>
+<script>
+function setImg(filename){
+    //문서 내의 big이라는 이미지 경로를
+    //선택한 이미지로 변경함
+    var big=document.getElementById("big");
+    big.src="../images/"+filename;
+}
+</script> 
+<body>
+    <div id="wrapper">
+        <div id="thumb">
+            <img src="../images/m1.jpg" onclick="setImg('m1.jpg')">
+            <img src="../images/m2.jpg" onclick="setImg('m2.jpg')">
+            <img src="../images/m3.jpg" onclick="setImg('m3.jpg')">
+            <img src="../images/m4.jpg" onclick="setImg('m4.jpg')">
+            <img src="../images/m5.jpg" onclick="setImg('m5.jpg')">
+            <img src="../images/m6.jpg" onclick="setImg('m6.jpg')">
+            <img src="../images/m7.jpg" onclick="setImg('m7.jpg')">
+            <img src="../images/m8.jpg" onclick="setImg('m8.jpg')">
+            <img src="../images/m9.jpg" onclick="setImg('m9.jpg')">
+            <img src="../images/m10.jpg" onclick="setImg('m10.jpg')">
+        </div>
+        <div id="content">
+            <img src="../images/m10.jpg" style="width:100%;height:100%"; id="big">
+        </div>
+    </div>
+
+</body>
+</html>

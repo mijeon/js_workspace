@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>횡스크롤슈팅게임</title>
+    <style>
+        body{margin:0px;}
+        #stage{
+            width: 100%;
+            height: 640px;
+            background-image:url(../images/game_bg.jpg);
+            position: relative;
+            overflow: hidden;
+        }
+        #wrapper{
+            width: 100%;
+            height: 160px;
+            border: 2px solid powderblue;
+            overflow: hidden; 
+            box-sizing: border-box;  /*가로 스크린 제거*/
+        }
+        #info1, #info2, #info3{
+            width: 33.3%;
+            height: 100%;
+            float: left;
+        } 
+        #info1{
+            background-color: beige;
+        }
+        #info2{
+            background-color: powderblue;
+        }
+        #info3{
+            background-color: silver;
+        }
+    </style>
+    <script src="./classes/Plane.js"></script> <!--3-1-->
+    <script src="./classes/Bullet.js"></script> <!--7-1-->
+    <script src="./classes/Enemy.js"></script> <!--8-1-->
+    <script src="../lib/util.js"></script> <!--9-->
+    <script>
+        let stage;  //2-1 
+        let bgX=0;  //2-3
+        let bgSpeed=2;  //2px씩 움직임
+        let info1, info2, info3;  //5-2 전역변수 선언
+        let plane;  //5-4 printLog()에서 사용하기 위해
+        let planeSpeed=5;  //6-1 키보드를 눌린 후 비행기의 속도를 결정짓는 변수
+        let bulletArr=[];  //7-2  7-4 생성될 총알이 여러개이므로, 배열이용
+        let enemyNameArr=[
+        "벌.png",
+        "벌2.png",
+        "larva.png",
+        "larva2.png",
+        "larva3.png"];  //8-4 적군의 명단을 담을 배열
+        let enemyArr=[]  //적군 객체 자체를 담을 배열
+
+
+        //2 배경효과 처리
+        function bgEffect(){
+            bgX-=bgSpeed;  //2-4 변수로 받아서 속도 변경
+            stage.style.backgroundPosition=bgX+"px 0px";
+            
+        }
+
+        //4-1 주인공 생성하기
+        function createHero(){
+            //constructor(contrainer, src, x, y, width, height, velX, velY)  //초기값 생성 
+            plane=new Plane(stage, "../images/angryBird2.png", 20, 100, 100, 100, 0, 0);
+        }
+        //8-3 적군 생성하기
+        function createEnemy(){
+            for(let i=0;i<enemyNameArr.length;i++){
+                //constructor(container, src, x, y, width, height, verlX, verlY)
+                let enemy=new Enemy(stage, "../images/"+enemyNameArr[i], screen.width-100, 100*i, 100, 85, -3, 0);  //다가와야하니까 마이너스
+                enemyArr.push(enemy);
+            }
+        }
+
+        //5-1 게임의 현황(메모리)을 알 수 있는 로그 출력
+        function printLog(){
+            let str="";
+
+            //5-4 info1에 출력
+            str+="비행기 velX값 : " + plane.velX + "\n";
+            str+="비행기 velY값 : " + plane.velY + "\n";
+            str+="총알수 : "+bulletArr.length + "\n";  //7-6
+            info1.innerText=str;
+            
+            //8-5 info2에 출력
+            str="적군수 : " + enemyArr.length + "\n";
+            info2.innerText=str;
+
+            //5-3 info3에 출력
+            str="배경속도 : "+bgSpeed+"\n";  //str 값이 누적되면 안되므로 +제거
+            info3.innerText=str;
+        }
+        //6-3 주인공 키보드 제어 관련
+        function moveX(sp){
+            plane.velX=sp;
+        }
+        function moveY(sp){
+            plane.velY=sp;
+        }
+        //7-1 총알  생성하기
+        function fire(){
+            //constructor(container, src, x, y, width, height, verlX, verlY)
+            //width: 비행기 x좌표+너비, height: 비행기 y좌표 + 비행기 높이/2
+            //주인공 속도와 총알 속도가 달라야 앞으로 나갔을 때 총알이 날라감
+            let bullet=new Bullet(stage, "../images/fire.png", plane.x+plane.width, plane.y+(plane.height/2), 50, 50, 10, 0);  
+            bulletArr.push(bullet);  //7-5
+        }
+        //1 fps : frame per second
+        function gameLoop(){
+            //console.log("gameLoop() called");  //gameLoop()가 돌고있는지 확인
+            bgEffect();  //2-5
+
+            //6-4 주인공 루프 호출
+            plane.tick();
+            plane.render();
+
+            //7-3 총알 루프 호출
+            for(let i=0;i<bulletArr.length;i++){  //총알이 있을 경우에만 //if(bullet!=undefined){} 초기에 총알이 없으므로 에러가 발생됨
+                bulletArr[i].tick();
+                bulletArr[i].render();
+            }
+
+            //8-4 적군 루프 호출
+            //게임에 등장하는 총알들과, 적군들을 ㅈ사
+            for(let i=0;i<enemyArr.length;i++){
+                enemyArr[i].tick();
+                enemyArr[i].render();
+            }
+
+            printLog();  //5 실시간 정보 출력 용도
+            setTimeout("gameLoop()", 10);
+        }
+        function init(){
+            stage=document.getElementById("stage");  //2-2
+            info1=document.getElementById("info1");  //5-2
+            info2=document.getElementById("info2");  //5-2
+            info3=document.getElementById("info3");  //5-2
+
+            //스테이지의 크기 지정 (화면 너비)
+            //stage.style.width=screen.width+"px";
+            //document.getElementById("wrapper").style.width=screen.width+"px";
+
+            createHero();  //4
+            createEnemy();  //8-2
+            gameLoop();  //1-1
+
+            //6 키보드 이벤트 연결
+            document.body.addEventListener("keydown", function(e){
+                console.log(e.keyCode);
+
+                switch(e.keyCode){
+                    case 37:moveX(-planeSpeed);break;  //6-3 값이 moveX, moveY로 들어감
+                    case 38:moveY(-planeSpeed);break;
+                    case 39:moveX(planeSpeed);break;
+                    case 40:moveY(planeSpeed);break;
+                    case 32:fire();break;
+                    case 27:;break;  //ESC
+                }
+            });
+            //6-5 키보드 땠을 때 멈춤
+            document.body.addEventListener("keyup", function(e){
+                switch(e.keyCode){
+                    case 37:moveX(0);break;  
+                    case 38:moveY(0);break;
+                    case 39:moveX(0);break;
+                    case 40:moveY(0);break;
+                }
+            });
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="stage"></div>
+    <div id="wrapper">
+        <div id="info1">주인공 정보</div>
+        <div id="info2">적군 정보</div>
+        <div id="info3">게임 설정</div>
+    </div>
+</body>
+</html>

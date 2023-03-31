@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>json</title>
+    <script>
+        /*
+        공공데이터 포털 등 이 기종 간의 데이터를 교환하는 형식으로
+        가장 많이 사용되는 형식은 xml과 json이 있음 이때 주의할 점은
+        json의 경우 프로그래밍 언어가 아닌 단순한 문자열일 뿐인데
+        단지, 그 형식이 javascript 객체 형식을 따른다 하여 json이라함
+        (그래도 여전히 문자열임) 하지만 js의 내장객체는 문자열에 불과한 
+        json을 객체로 취급할 수 있는 능력이 있음 (json 내장객체를 이용)
+        */ 
+        let str="{";
+        str+="\"name\":\"전승호\",";
+        str+="\"age\":23,";
+        str+="\"isMarried\":false";
+        str+="}";
+        console.log(str);
+        //우리의 str은 문자열에 불과하므로, 프로그램에서 객체로 
+        //사용할 수 없음, 하지만 내장객체로 문자열을 객체화시켜보자
+        //특히 문자열을 해석하는 과정을 가리켜 파싱(parsing)
+        let obj=JSON.parse(str);  //해석하여, 객체로 반환해줌
+        console.log(obj.name, obj.age, obj.isMarried);
+
+        //내장객체로 파싱할 필요가 없음
+        let data={
+            "name":"기린",
+            "age":17
+        };
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

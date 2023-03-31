@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클릭한곳으로이동하는반딧불</title>
+    <style>
+        #wrapper{
+            width: 100%;
+            height: 700px;
+            background-image: url(../images/night.jpg);
+            background-size:100% 700px;
+        }
+        </style>
+    <script src="../lib/util.js"></script>
+    <script>
+        var a=0.1;  //다가갈 정도를 표현하는 비율계수
+                        //비율계수가 커질수록 보폭이 커지므로, 너무 커지면
+                        //투박해지므로 알아서 조절하자(0.1이 자연스러움)
+        var targetX=800;  //반딧불이 도달할 목표 x축 지점
+        var targetY=300;  //반딧불이 도달할 목표 y축 지점
+        var bug;  //모든 함수에서 접근할 수 있도록 전역변수로 빼두자
+
+        //반딧불을 특정 좌표로 이동해보기
+        function move(){
+            //버그위치는 = 기존 버그위치+a*(목표지점-현재 버그위치) 
+            //문자로 인식하므로 parseInt로 감싸줌
+            bug.style.left=parseInt(bug.style.left)+ a*(targetX-parseInt(bug.style.left))+"px";  
+            bug.style.top=parseInt(bug.style.top)+a*(targetY-parseInt(bug.style.top))+"px";
+            //console.log("x:", parseInt(bug.style.left), "y:", parseInt(bug.style.top));
+        }
+        //반딧불의 새로운 좌표를 마우스를 이용하여 설정해주자
+        //즉, 마우스를 누를 때 그 좌표를 구하여 targetX, targetY값을
+        //설정해주자
+        function setTarget(){
+            console.log("마우스 x좌표는", event.clientX, "마우스 y좌표는 ", event.clientY);
+            targetX=event.clientX;
+            targetY=event.clientY;
+        }
+        //3초 간격으로 사용자 대신 랜덤함수를 호출하여 반딧불이
+        //목표지점을 대신 지정해주는 함수정의
+        function autoTarget(){
+            targetX=getRandom(1000);
+            targetY=getRandom(700);
+            //setTimeout("autoTarget()", 2000);
+        }
+         //이 함수의 목적 : 프로그램이 가동되자 마자 
+         //초기화할 작업이 있다면 여기서 해준다
+         function init(){
+            bug=document.getElementById("bug");
+            bug.style.position="absolute";
+            bug.style.left=0+"px";
+            bug.style.top=150+"px";
+            //console.log("초기화 완료");
+            setInterval("move(), 10");  //지정한 함수를, 지정한 간격으로 지속적으로
+                                                    //호출한다 (끝내려면 clearTimeout())
+            autoTarget();
+        }
+    </script>
+</head>
+<body onLoad="init()" onmousemove="setTarget()">
+   <!-- 마우스 이벤트는 배경을 대상으로 동작할 수 없다. 따라서
+    화면 크기만한 div를 존재시켜 이 문제를 해결해보자 -->
+    <div id="wrapper">
+    <button onClick="move()">수동테스트</button>
+    <img src="../images/bug.png" alt="" id="bug">
+    </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>카드넘기기</title>
+<style>
+#wrapper{
+	width:500px;
+	height:600px;
+	background-color:blue;
+	margin:auto;
+}
+#control{
+	width:100%;
+	height:100px;
+	background-color:yellow;
+	text-align:center;
+}
+
+#content{
+	width:100%;
+	height:500px;
+	background-color:green;
+}
+
+img{
+	width:100%;
+	height:100%;
+}
+
+button{
+	width:100%;
+	height:100%;
+	font-size:50px;
+}
+</style>
+<script>
+var n=1; //카드의 번호를 증가시키기 위한 전역변수
+//if(n>=10){
+	function next(){
+		//문서 내의 이미지의 src를 바꾸자, 1씩 증가하면서
+		var img=document.querySelector("img");
+		n++;
+		var j=(n%3==0)? "joker":"h"+n;
+		n=(n>=10)? 0:n;
+		img.src="../images/"+j+".png";
+	}
+//}
+</script>
+</head>
+<body>
+
+	<div id="wrapper">
+		<div id="control">
+		<button onClick="next()">넘기기</button>
+		</div>
+		<div id="content"><img src="../images/h1.png"></div>			
+	</div>
+
+</body>
+</html>

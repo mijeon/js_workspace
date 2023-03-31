@@ -1,0 +1,83 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+/* div는 기본적으로 텅비어 있는 태그이므로, 눈에 보이지 않는다.
+   따라서 시각적인 확인을 위해 배경색을 입혀보자 */
+
+/* CSS 구성 : 선택자{}
+ 우리가 사용했던 선택자 - 태그명
+ id - #을 붙여야 함
+ */
+
+#wrapper{
+	background-color:#ffccff;
+	overflow:hidden;  
+	width:800px;
+	height:600px;
+	margin:auto; /*내가 차지하고 남은 공간을 대상으로 양분하여 똑같이 마진을 적용 */
+	/*div 영역을 넘어설 때, 넘어서는 부분은 안보이게 처리
+	주의) 보통 레이아웃 작업 시 자식이 float 될 때 부모에는 묻지도 따지지말고
+	모조건 overfloat:hidden
+	*/
+}
+#box1{
+	background-color:#99ccff;	
+	width:100px;
+	height:100%;
+	float:left;  /*현재의 태그를 z축 왼쪽으로 띄움*/
+}
+
+#box2{
+	background-image:url(../images/room.jpg);
+	width:700px;                        
+	height:100%;  /* 높이가 부모에 다다를 때까지*/
+	float:left;  /*현재의 태그를 z축 왼쪽으로 띄움*/
+}
+#blind{
+	width:100%; /* box2 안에 갖혀있기 때문에, 그 안에서의 100% */
+	height:100%;
+	background-color:black;
+	opacity:0.8;
+}
+</style>
+<script>
+	var flag=false;   //삼항연산자의 조건 판단의 기준이 되는 변수
+	function onOff(){
+		 flag=!flag;
+		//좌측의 스위치 이미지를 반대 이미지로 전환하자
+		var sw=document.getElementById("sw");
+		var op=(flag)? "on":"off";
+
+		sw.src="../images/switch_"+op+".png";		
+
+		//투명도까지 조절하자
+		var blind=document.getElementById("blind");
+		var trans=(flag)? 0:0.8;
+		blind.style.opacity=trans; 
+	}
+
+</script>
+</head>
+<body>  
+	<!--
+		문서의 레이아웃을 결정하는 태그
+		모든 태그는 block 형 이거나 inline 형이다
+		block : 같은 수평선 상에 그 어느 누구의 존재도 허용하지 않음
+		inline : block의 반대
+	-->
+<div id="wrapper">
+	<div id="box1">
+	<img src="../images/switch_on.png" id="sw" onClick="onOff()">
+	</div>
+	<div id="box2">
+	<div id="blind">
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>비행기조종하기</title>
+    <style>
+        body{
+            background-image: url(../images/game.jpg);
+            
+            /* 배경위치 x축, y축*/
+            background-position: -20px, 0px; 
+        }
+
+        img{
+            width: 70px;
+            /* 태그 위치를 조정하는 스타일시트 적용 position */
+            /* position:absolute;  부모 요소를 기준으로 한 위치 */
+            /* left: 100px;  좌측 부모인 boby로부터 100픽셀 이동 */
+            /* top: 200px;  위쪽 벽으로부터 200픽셀 이동 */ 
+        }
+
+    </style>
+    <script>
+        var x=0;  //전역변수 선언 (프로그램이 끝날 때까지 누적되어야 함)
+        function moveBg(){
+            //문서 내 boby에 적용된 배경의 위치값중 x축의 값을
+            //점점 감소시켜보자 (즉 음의 방향)
+            x=x-10;
+            document.body.style.backgroundPosition= x+"px 0px";
+
+            setTimeout("moveBg()", 50); //moveBg()를 1000/1000 뒤에 호출하시오
+            
+        }
+
+        function moveRight(){
+            //문서 내에 우주선 이미지에 적용된 스타일시트 position 중 left 값을 증가
+            document.querySelector("img").style.position.left=500+"px";
+        }
+    </script>
+</head>
+
+<body>
+
+<button onclick="moveBg()">배경 움직이기</button>
+<table border="1px">
+    <tr>
+        <td></td>
+        <td><input type ="button" value="▲"></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input type ="button" value="◀"></td>
+        <td><input type ="button" value="▼"></td>
+        <td><input type ="button" value="▶" onclick="moveRight()"></td>
+    </tr>
+</table>
+<img src="../images/rocket.png" style="position:absolute;left:0px;top:300px">
+
+</body>
+</html>

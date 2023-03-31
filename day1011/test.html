@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+<style>
+    #wrapper{
+        width:800px;
+        height:600px;
+        background-color:yellowgreen;
+        margin:auto;
+    }
+    #thumb{
+        width:100%;
+        height:100px;
+        background-color:beige;
+        overflow:hidden;
+    }
+    #content{
+        width:100%;
+        height:500px;
+        background-color:rgb(89, 149, 228);
+    }
+    #thumb div{
+        width: 100px;
+        height: 80px;
+        border:2px solid red;
+        float:left;
+
+    }
+</style>
+<script>
+    function setBg(color){
+        var content=document.getElementById("content");
+        content.style.background=color;
+    }
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="thumb">
+        <div id="box1" style="background:red;" onclick="setBg('red')"></div>
+        <div id="box2" style="background:orange;" onclick="setBg('orange')"></div>
+        <div id="box3" style="background:yellow;" onclick="setBg('yellow')"></div>
+        <div id="box4" style="background:green;" onclick="setBg('green')"></div>
+        <div id="box5" style="background:blue;" onclick="setBg('blue')"></div>
+        <div id="box6" style="background:navy;" onclick="setBg('navy')"></div>
+        <div id="box7" style="background:purple;" onclick="setBg('purple')"></div>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

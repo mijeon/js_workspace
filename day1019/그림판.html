@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그림판</title>
+    <script>
+        const CELL_SIZE=10;//3-1
+        const CEL_ROWS=100;  //3-3행의 개수 (층수-바깥쪽)
+        const CEL_COLS=100;  //열의 개수 (호수 - 안쪽)
+
+        let wrapper;  //4-3  wrapper를 creatCell() 함수에서 사용하기 위해 전역변수로 선언
+        let flag=false;  //5-2  그림그리기 비활성화
+        let logArray=[];  //6-2 그림 효과를 낼 때 배경색이 바뀐 셀을 담을 배열
+        let n=0;  //logArray의 배열을 순차적으로 접근할 index
+                    //for문 사용을 하지 않기 때문에 for문의 i를 대체할 변수
+        let st;  //setTimeout()을 멈추기 위해 setTimeout()을 담아놓을 변수
+        
+        //4 wrapper의 수는 셀에 의해 결정되므로, 이 예제에서는 wrapper를
+        //동적 즉, 프로그래밍적으로 생성하자
+        function createWrapper(){
+            wrapper=document.createElement("div");
+            wrapper.style.width=(CELL_SIZE*CEL_COLS)+"px";  //4-1초기값 변경
+            wrapper.style.height=(CELL_SIZE*CEL_ROWS )+"px";
+            wrapper.style.border="1px solid black";
+            wrapper.style.margin="auto";
+            wrapper.style.position="relative";  //4-6  creatCell() 함수의 부모 요소이므로 위치 정의
+
+            document.body.appendChild(wrapper);
+
+            //5-3 wrapper 상에서 마우스를 누른 상태라면
+            wrapper.addEventListener("mousedown", function(){
+                flag=true;  //그리기 활성화
+            });
+            wrapper.addEventListener("mouseup", function(){
+                flag=false;  //그리기 비활성화
+            });
+        }
+
+        //3 그림판을 이루는 하나 하나의 셀을 생성하자
+        function creatCell(){
+            for(let a=0;a<CEL_ROWS;a++){  //층수
+                for(let i=0;i<CEL_COLS;i++){  //4-7 호수
+                    let cell=document.createElement("div");
+                    cell.style.width=CELL_SIZE+"px";  //3-2 초기값에 변수 대입
+                    cell.style.height=CELL_SIZE+"px";  //3-2
+                    cell.style.background="skyblue";
+                    cell.style.border="1px solid red"
+                    cell.style.position="absolute";
+                    cell.style.left=(i*CELL_SIZE)+"px";  // 초기값 변경
+                    cell.style.top=(a*CELL_SIZE)+"px";
+                    
+                    //3-3 cell을 wrapper에 붙이자 
+                    wrapper.appendChild(cell);  //4-4
+
+                    //5 각 셀에 이벤트 연결
+                    cell.addEventListener("click", function(){  //
+                        //if(flag){  //5-1
+                            this.style.background="white";
+
+                            //6-2
+                            logArray.push(this);  //cell div
+                            console.log(logArray);
+                        //}
+                    });
+
+                }
+            }
+
+        }
+        //6-1 내가 그린 그림 지우기
+        function removePaint(){
+            //모든 셀을 대상으로, 다시 색상 원상복귀
+            for(let i=0;i<wrapper.children.length;i++){  //html에서 wrapper의 배열 자동 생성
+                wrapper.children[i].style.background="skyblue";
+            }
+        }
+        //6-5
+        function playPaint(){
+            // for(i=0;i<logArray.length;i++){  //우리가 보유한 로그기록 배열만큼
+            //     let cell=logArray[i];  //우리가 그렸던 바로 그 div 셀 1개가 반환
+            //     let a=0;a<wrapper.children.length;a++ 
+            //             cell.style.background="white";
+            // }
+
+            //반복문은 너무 빨라서, 재생의 효과가 떨어짐 따라서
+            //느린 속도로 그림을 재생해보자
+            let cell=logArray[n];  //우리가 그렸던 바로 그 div 셀 1개가 반환
+            cell.style.background="white";
+            n++;
+            st=setTimeout("playPaint()", 200);  //재귀호출
+            
+            if(n>=logArray.length){
+                clearTimeout(st);  //현재 실행중인 타임아웃 중지
+            }
+        }
+        //6 버튼들을 생성하자
+        function createBtn(){
+            let bt_del=document.createElement("button");  //삭제버튼
+            let bt_play=document.createElement("button");  //재생버튼
+
+            bt_del.innerText="지우기";
+            bt_play.innerText="다시보기";
+
+            document.body.appendChild(bt_del);
+            document.body.appendChild(bt_play);
+
+            bt_del.addEventListener("click", function(){
+                removePaint();
+            });
+
+            bt_play.addEventListener("mousemove", function(){  //6-4
+                playPaint();
+            });
+        }
+        //2
+        function init(){
+            createBtn();
+            createWrapper();  //4-2
+            creatCell();  //4-5
+        }
+        //1
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

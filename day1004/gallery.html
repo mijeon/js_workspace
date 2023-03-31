@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>갤러리</title>
+    <style>
+        /* 이 영역은 css의 영역이며, css는 프로그래밍 언어 X */
+    </style>
+    <script>
+        /* 이 영역은 자바스크립트라는 프로그래밍 영역이므로,
+        대소문자 구분함
+        */
+        // 개발자가 특정 코드 영역을 블럭으로 지정한 후 이름을 붙인 단위를 가르켜 함수라한다.
+        // 함수 사용 이유 
+        // 1) 코드의 재사용 2) 관련성 있는 코드의 분리
+        
+        var x=1;  //전역변수 : 프로그램이 끝날 때까지 그 값이 유지되는 변수
+
+        function next(){         //지정
+            //alert('나 눌렀어?');
+            //문서 내의 큰 이미지의 src 속성을 다른 사진으로 바꾸자
+           //var x=1;  //지역변수, 변수가 태어난 시점
+           x++;
+		   x=(x>10)? 1:x;
+            document.querySelector("img").src="../images/m" +x+".jpg"
+			document.getElementById("num").innerText=x+"/10" //이미지 내에 텍스트 
+    }
+        function prev(){
+            x--;
+			x=(x<1)?10:x;
+            document.querySelector("img").src="../images/m" +x+".jpg"
+			document.getElementById("num").innerText=x+"/10"
+        }
+   
+    </script>
+</head>
+<body>
+    <table width="600px" border="1px" align="center">
+		<tr>
+            <td id="num" align="center">1/10</td>
+        </tr>
+		<tr>
+            <td><img src="../images/m1.jpg" width="600px" heigth="400px"></td>
+        </tr>
+        <tr>
+            <td align="center">
+                <button onclick="prev()">이전</button>
+                <button onClick="next()">다음</button>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

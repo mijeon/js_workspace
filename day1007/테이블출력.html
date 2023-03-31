@@ -1,0 +1,45 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>테이블출력</title>
+<script>
+//write()에 지정한 문자열을 body 태그 안에 출력
+//document.write("대한민국 <b>만세</b>");
+
+var f=parseInt(prompt("원하는 층수를 입력하세요"));
+var h=parseInt(prompt("원하는 호수를 입력하세요"));
+
+document.write("<table border=\"1px\" align=\"center\">");
+
+for(var a=f;a>=1;a--){
+	document.write("<tr>");
+	for(var i=1;i<=h;i++){
+		document.write("<td>"+a+"층"+i+"호</td>");
+		}
+	document.write("</tr>");
+}
+
+//document.write("영희가 철수에게 말했다. \"야 이 바보야\"");  // \" 쌍따움표 문자
+</script>
+</head>
+<body>
+<!-- 
+<table width="300px" border="1px" align="center">
+	<tr>
+	<td>201호</td>
+	<td>202호</td>
+	<td>203호</td>
+	</tr>
+	<tr>
+	<td>101호</td>
+	<td>102호</td>
+	<td>103호</td>
+	</tr>
+</table>
+-->
+</body>
+</html>

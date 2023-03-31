@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동작요소생성</title>
+    <script>
+        //지금까지는 boby 영역에 태그를 작성하고, 이벤트 핸들러를 
+        //연결해왔다, 하지만 자바스크립트에서도 동적으로(살행시)
+        //동일한 작업이 가능함
+        function  createBtn(){  //2번
+            var img=document.createElement("img");  //<img> 작성과 동일
+            img.src="../images/mon.jpg";  //<img src=""> 동일
+
+            //이미지요소에 (클릭) 이벤트 구현 //3번
+            img.addEventListener("mouseover", function(){
+                alert("올렸어?");
+            });
+
+            //boby에 붙이자
+            document.body.appendChild(img);
+        }
+
+        //window는 최상위 객체로 대체할 수 없기 때문에 생략가능  
+        addEventListener("load", function(){  //1번 //로드되면 function 호출
+        //alert("문서가 로드되었어");
+        createBtn();  //함수호출  //3번
+        }); 
+        
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

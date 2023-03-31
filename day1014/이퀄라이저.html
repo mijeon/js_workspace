@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이퀄라이저</title>
+    <style>
+        body{
+            margin:0;  
+        }
+        #wrapper{
+            width:700px;
+            height:400px;
+            background-color: black;
+            margin: auto;
+            position: relative;  /*자식 떄문에 부모에도 위치 명시*/
+        }
+    </style>
+    <script src="../lib/util.js"></script>  <!--4-1) src 밑에는 로직 작성 X--> 
+    <script>
+        let  bar=new Array(14);  //5-2  bar함수에 [i]추가
+        let color=["#FFB6C1", "#FFC0CB", "#FFE4E1", "#FFEBCD", "#FFFFE0	", "#FFF8DC", "#FAEBD7","#FFEFD5", "#FFFACD", "#F5F5DC", "#FAF0E6", "#FDF5E6", "#E0FFFF", "	#F0F8FF"]; //5-3 컬러 함수를 배열로 선언하여, color[i]로 변경
+        //let  bar;     //3-2  5-2에서 배열로 선언
+        let a=0.1;  //3-2
+        let targetH=new Array(14);  //5-5       
+        //let targetH=400;  //3-2
+
+        function move(){
+            //3-1)막대의 위치를 감속도 운동으로 변하게 하는 함수
+            //막대높이 =기존 막대높이 *비율계수(목표높이-현재 막대높이)
+           for(let i=0;i<bar.length;i++){  //5-4) 막대 위치 변경하는 반복문 //기존 bar -> bar[i]로 변경
+                bar[i].style.height=parseFloat( bar[i].style.height)+a*(targetH[i]-parseFloat( bar[i].style.height))+"px";  //3-2)전역변수로 선언하여 호출가능
+                bar[i].innerText=bar[i].style.height;
+            }           
+        }
+        function init(){  
+            for(let i=0; i<14;i++){  //5) 막대 개수 늘리는 반복문 //기존 bar -> bar[i]로 변경
+                //2) div를 이퀄라이저 막대로 이용하기 위해 동적으로 div를 생성하자
+                bar[i]=document.createElement("div");  //2/3-2)전역변수로 선언하여 let 지움
+                bar[i].style.width=50+"px";
+                bar[i].style.height=400+"px";
+                bar[i].style.background=color[i];  //2 초기값:"skyblue"/5-3)color[i]로 변경
+                bar[i].style.position="absolute";  //2-2
+                bar[i].style.left=(i*50)+"px";  //2-2 초기값=0 //5-2
+
+                //2-1) wrapper에 bar를 부착하자
+                let wrapper=document.getElementById("wrapper");
+                wrapper.appendChild(bar[i]);  //막대부착
+            }
+        }
+        function gameloop(){  //3
+                setInterval("move()", 10);  //3-3
+            }
+            
+    
+        function setTarget(){
+            //3-4)지정한 시간 간격으로 targetH 값을 랜덤하게 변경
+            //targetH 값만 변경해도, 루프에 의해 효과가 남
+            for(i=0;i<targetH.length;i++){  //5-5  막대기가 따로 움직이는 반복문 //targetH->targetH[i]로 변경, move()함수에서도 변경해야 함
+                targetH[i]=getRandomWithRange(10, 400);  //4-2
+        }
+    }
+        window.addEventListener("load", function(){  //1
+            init();  
+            gameloop();  //3-3
+            setInterval("setTarget()", 300)  //4
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper"></div>
+</body>
+</html>

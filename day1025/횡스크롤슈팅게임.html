@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>횡스크롤슈팅게임</title>
+    <style>
+        body{margin: 0px;}
+        #stage{
+            width: 100%;
+            height: 640px;
+            background-image: url(../images/forest.png);
+            background-size: 100% 100%;
+        }
+    </style>
+    <script src="./Plane.js"></script> <!--5-2-->
+    <script src="./Bullet.js"></script> <!--8-5-->
+    <script src="./Enemy.js"></script> <!--11-1-->
+
+    <script>
+        let stage;  //2-2 bgEffect() 함수에서 사용하기 위해 전역변수로 선언
+        let bgX=0;  //4-3
+        let plane; //8-1 move()에서 사용하기 위해
+        let bulletArr=[];  //9-2 bullet  //9-4 bulletArr :empty array size 0
+        let enemynameArr=[  //11-4
+        "벌.png",
+        "벌2.png",
+        "larva.png",
+        "larva2.png",
+        "larva3.png"
+        ];
+        let enemyArr=[];  //11-4 enemy 전역변수로 선언  //11-6 적군 객체들을 담을 배열
+
+        //6 주인공 생성하기
+        function createHero(){
+            //constructor(container, x, y, width, height, velX, velY)
+            plane=new Plane(stage, 100, 200, 100, 100, 0, 0);
+        }
+        //11-3 적군들 생성하기
+        function createEnemy(){
+            //constructor(container, x, y, width, heihgt, velX, velY, src)
+            for(let i=0; i<enemynameArr.length;i++){  //11-7
+                enemy=new Enemy(stage, screen.width-100, i*100, 80, 80, -3, 0, "../images/"+enemynameArr[i]);  //11-5
+                enemyArr.push(enemy);  //11-8적군을 배열에 추가
+            }
+        }
+        //4 배경 제어
+        function bgEffect(){
+            //4-2 게임의 배경 x축 좌표를 음수 방향으로 변경
+            bgX-=1;  //4-4
+            stage.style.backgroundPosition=bgX+"px 0px";  //4-4 초기값 변경 0->bgX
+        }
+        //8 주인공 움직이기
+        function moveX(velX){
+            plane.velX=velX;
+            
+        }
+        function moveY(velY){
+            plane.velY=velY;
+        }
+        //9 총알발사 함수 정의
+        function fire(){
+            //constructor(container, x, y, width, heihgt, velX, velY, src)
+            //9-2 전역변수로 선언  //9-4 지역변수로 재선언
+            let bullet=new Bullet(stage, plane.x+plane.width, plane.y+(plane.height/2), 25, 25, 10, 0, "../images/fire.png");
+            bulletArr.push(bullet);  //9-5
+        }
+        //3
+        function gameLoop(){
+            bgEffect();  //4-1
+            
+            plane.tick();  //8-3 물리량 변화
+            plane.render();  //8-3 화면에 그리기
+            
+            //11-6 적군 움직이기
+            for(let i=0;i<enemyArr.length;i++){  //11-8 반복문
+            enemyArr[i].tick();  //물리량 변화
+            enemyArr[i].render();  //화면에 그리기
+            }
+
+            //9-1 총알 날리기
+            for(let i=0;i<bulletArr.length;i++){  //9-6
+                bulletArr[i].tick();  //9-3
+                bulletArr[i].render();
+
+            /*10 스크린 밖으로 나가면 총알 제거
+            주의) 배열을 제일 먼저 제거하면 위험,
+            일단 사용 후, 제일 마지막에 제거*/
+                if(bulletArr[i].x > screen.width-200){
+                    //10-1 화면에서 제거
+                    //bulletArr.indexOf(bulletArr[i]);  //찾을 대상 : 필요옶음 
+                    stage.removeChild(bulletArr[i].img);  //html요소  제거
+
+                    //10-2 배열에서 제거
+                    bulletArr.splice(i, 1);
+                }
+            }
+
+            setTimeout("gameLoop()", 10);
+        }
+        //2
+        function init(){
+            //alert(screen.width+","+screen.height);
+
+
+            stage=document.getElementById("stage");  //2-1
+            createHero();  //5-4주인공 등장
+            createEnemy();  //11-2적군들 등장
+
+            //7 주인공을 키보드로 제어하도록 body에 이벤트 연결하기
+            document.body.addEventListener("keydown", function(e){
+                //37 left, 38 up, 39 right, 40 down, 32 space
+                switch(e.keyCode){
+                    case 37:moveX(-5);break;  //좌
+                    case 38:moveY(-5);break;  //위
+                    case 39:moveX(5);break;  //우
+                    case 40:moveY(5);break;  //아래
+                    case 32:fire();break
+                }
+            });
+            //8-1
+            document.body.addEventListener("keyup", function(e){
+                //37 left, 38 up, 39 right, 40 down, 32 space
+                switch(e.keyCode){
+                    case 37:moveX(0);break;  //좌
+                    case 38:moveY(0);break;  //위
+                    case 39:moveX(0);break;  //우
+                    case 40:moveY(0);break;  //아래
+                }
+            });
+
+            gameLoop();  //3-1
+        }
+        //1
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="stage"></div>
+</body>
+</html>

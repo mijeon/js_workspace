@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슈퍼마리오</title>
+</head>
+    <script src="./classes/GameObject.js"></script>
+    <script src="./classes/Brick.js"></script>
+    <script src="./classes/Mario.js"></script>
+    <script src="../lib/util.js"></script>
+    <script>
+        let brickArr=[];
+        const BRICK_SIZE=48;  //2-1 나중에 border = 1 적용을 염두해뒀기 때문에
+        let mario;  //3-1
+        let info;  //4 게임의 정보를 출력할 div
+        let gameFlag=true;
+
+        //2 벽돌 생성
+        function createBrick(){
+            for(let i=0;i<7;i++){  //6층
+                let arr=[];
+                for(let a=0;a<20;a++){  //20호
+                    //constructor(container, color, x, y, width, height, velX, velY)
+                    if(i==6 && a>=0){
+                        let brick=new Brick(document.body, "#e6e6ff", 100+(a*BRICK_SIZE), 100+(i*BRICK_SIZE), 50, 50, 0, 0);
+                        arr.push(brick);
+                    }
+                }
+                brickArr.push(arr);  //바깥쪽에서 일차원 배열을 6번 푸쉬함
+            }
+        }
+        //3-1 주인공 생성
+        function createMario(){
+             //constructor(container, color, x, y, width, height, velX, velY)
+            mario=new Mario(document.body, "#ff9999", 100, 50, 50, 75, 0, 3);
+        }
+        //4-1 실시간으로 정보 출력
+        function printLog(){
+            let str="velY : " + mario.velY+"\n";
+            str+="y : " + mario.y+"\n";  //누적
+            str+="g 중력 : " + mario.g+"\n";  
+            str+="width : " + mario.width+"\n";  
+            str+="height : " + mario.height+"\n";  
+            str+="fall : " + mario.fall+"\n";  
+
+            info.innerText=str;
+        }
+        //마리오 움직이기
+        function moveX(n){
+            mario.velX=n;
+        }
+        //4-4 마리오 점프시키기
+        function jump(){
+            if(mario.velY<=0 && mario.fall){  //발이 바닥에 닿았을 때만 점프
+            mario.fall=false;  //4-6 false : 점프 true : 멈춤
+            mario.velY=-15;
+            }
+        }
+        function gameLoop(){  //1
+            //console.log("gameLoop called");
+            if(gameFlag){
+                mario.tick();  //3-2
+                mario.render();
+
+                printLog();
+            }
+            setTimeout("gameLoop()", 10);
+
+            //4-2 키보드 이벤트 연결
+            document.body.addEventListener("keydown", function(e){
+                switch(e.keyCode){
+                    case 37:moveX(-5);break;  //좌
+                    case 39:moveX(5);break;  //우
+                    case 32:jump();break;  //점프
+                    case 27:gameFlag=!gameFlag;break;
+                }
+            });
+
+            //4-3 키보드 이벤트 연결
+            document.body.addEventListener("keyup", function(e){
+                switch(e.keyCode){
+                    case 37:moveX(0);break;  //좌
+                    case 39:moveX(0);break;  //우
+                }
+            });
+        }
+        
+        function init(){
+            info=document.getElementById("info");  //4
+            createBrick();  //2-1
+            createMario();  //3
+            gameLoop();  //1-1
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+<body>
+    <div id="info"></div>
+</body>
+</html>

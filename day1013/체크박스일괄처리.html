@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="wnameth=device-wnameth, initial-scale=1.0">
+    <title>체크박스일괄처리</title>
+    <script>
+        //당분간은 js영역에서 이벤트를 연결하자
+        // document.querySelector("button");
+        // bt.addEventLisener("click", function(){
+        // alert();
+        // });
+
+        function init(){
+            //onClick  핸들러를 프로그래밍적으로 처리해보자
+            var bt=document.getElementsByName("bt");
+            var ch=document.getElementsByName("ch");  
+            var king=document.getElementById("king");
+
+            king.addEventListener("click", function(){
+                for(i=0;i<ch.length;i++){
+                    ch[i].checked=king.checked;   //king.checked: king의 체크상태를 따라감
+                }  
+            })
+
+            //모두체크 버튼을 누르면..
+            bt[0].addEventListener("click", function(){
+                //문서내의 모든 체크박스의 체크 상태를 true로 두자
+                for(i=0;i<ch.length;i++){
+                    ch[i].checked=true;
+                }  
+            });
+
+            //체크해제 버튼을 누르면..
+            bt[1].addEventListener("click", function(){
+                for(i=0;i<ch.length;i++){
+                    ch[i].checked=false;
+                }  
+            });
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>  <!--onLoad: html을 모두 실행한 다음 스크립트 실행함-->
+    <button name="bt">모두체크</button>
+    <button name="bt">체크해제</button>
+    <input type="checkbox" id="king">대표체크박스
+    <p></p>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>  
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+    <input type="checkbox" name="ch"> 스팸메일 제목 <br>
+</body>
+</html>

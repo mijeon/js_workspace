@@ -1,0 +1,85 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>음식나르기</title>
+<style>
+#wrapper{
+	width:1000px;
+	height:600px;
+	background:yellow;
+	margin:auto;
+}
+#food{
+	
+	float:left;  /*부모의 좌측 방향으로 띄움*/
+	width:50%;
+	height:100%;
+}
+#dish{
+	background:url(../images/dish.jpg);
+	background-size:500px 600px;
+	float:right;
+	width:50%;
+	height:100%;
+}
+span{
+	background:red;
+}
+
+</style>
+<script>
+
+//마우스를 움직이는 동안, 해당 마우스의 좌표를 얻어와 보자
+var flag=false;  //음식을 움직일지 말지를 결정하는 논리값, 처음은 무조건 수행x
+
+function getPos(){
+	console.log("마우스 x좌표는 ", event.clientX, "마우스 y좌표는 ", event.clientY);  //.은 소유권을 나타냄 
+	//음식 중 맘에 드는거 하나를 대상으로, 그 이미지의 left(x),top(y)좌표와 마우스좌표를 일치시켜보자
+	//마우스로 들고 다니는 효과가 날 것음
+	var f1=document.getElementById("f1");   //문서 내의 특정 태그를 접근하는 함수
+	
+	if(flag){
+	f1.style.left=event.clientX+(-50)+"px";  
+	f1.style.top=event.clientY+(-50)+"px";
+
+	}
+}
+//기존의 전역변수 flag값을 뒤집어버리자
+
+function drag(){
+	flag=!flag;
+
+	//만일 뒤집은 flag 값이 true인 경우, 들고다니는 상황이므로 유저들에게 시작적 효과를 줌
+	if(flag){
+	document.getElementById("f1").style.border="3px solid red";
+	}else{
+		document.getElementById("f1").style.border="0px";
+	}
+}
+</script>
+</head>
+<body onMouseMove="getPos()">
+	<!-- 모든 태그는 block or liline 둘중 하나이다.
+	block: 자신과 같은 수평선 상에 어떤 태그도 허용하지 않음
+			   width, height 변경 가능
+	
+	inline: 다른 태그와 공존할 수는 있지만 width, heigth를 조정할 수 없다
+		따라서 이 태그는 태그안의 컨텐츠만큼의 크기만 확보함 ...wrapper
+	<span>나 스팬</span>
+	<span style="">나도 스팬</span>
+	 -->
+	<div id="wrapper">
+		<div id="food">
+			<img src="../images/fishcake.jpg" width="100px" id="f1" style="position:absolute;left:0px;top:200px" onClick="drag()">
+			<img src="../images/fry.jpg" width="100px" id="f2" style="position:absolute;left:0px;top:300px" onClick="drag()">
+			<img src="../images/Tteokbokki.jpg" width="100px" style="position:absolute;left:0px;top:400px" onClick="drag()">
+			<img src="../images/gimbap.jpg" width="100px" style="position:absolute;left:0px;top:0px" onClick="drag()">
+		</div>
+		<div id="dish">접시 나올곳</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컨베이어벨트</title>
+    <style>
+        #wrapper{
+            width: 500px;
+            height: 200px;
+            background-color: yellowgreen;
+            margin: auto;           
+        }
+        #content{
+            width: 100%;
+            height: 200px;
+            background-color: beige;
+            position: relative;          
+        }
+    </style>
+    <script>
+        let box;
+        let a=0.1;
+        let num=1;
+
+        let nameArray=["images (1).jpg", "images (2).jpg", "images (3).jpg", "images (4).jpg", "images (5).jpg", "images (6).jpg", "images (7).jpg"];
+        let imgArray=new Array(nameArray.length);
+
+        const IMG_WIDTH=100;
+        const IMG_HEIGHT=100;  
+        
+        function createImg(){
+            for(let i=0;i<nameArray.length;i++){
+                let img=document.createElement("img");
+                img.src="../images/sea2/"+nameArray[i];
+                img.style.position="absolute";
+                img.style.left=(i*IMG_WIDTH)+"px";
+                img.style.width=IMG_WIDTH+"px";
+                img.style.height=IMG_HEIGHT+"px";
+                img.style.border="2px solid white";
+
+                imgArray[i]=img;
+
+                box.appendChild(img);
+            }           
+        }
+        function move(){
+            for(let i=0;i<imgArray.length;i++){
+                imgArray[i].style.left=parseFloat(imgArray[i].style.left)-num+"px";
+                if(parseFloat(imgArray[i].style.left)<=-100){
+                    imgArray[i].style.left=600+"px";
+                }
+            }           
+        }    
+        function init(){
+            box=document.createElement("div");
+            //box.style.width=IMG_WIDTH*nameArray.length+"px";
+            //box.style.height=IMG_HEIGHT+"px";
+            //box.style.background="gray";
+            //box.style.position="absolute";
+            //box.style.left=0+"px";
+
+            let content=document.getElementById("content");
+            content.appendChild(box);
+        }
+        window.addEventListener("load", function(){
+            init();
+            createImg();
+            setInterval("move()", 10);
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="content"></div>
+    </div>
+</body>
+</html>

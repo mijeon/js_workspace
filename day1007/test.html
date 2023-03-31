@@ -1,0 +1,23 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>함수기초</title>
+<script>
+
+function printDan(n){  //n은 매개변수로 바깥쪽에 있는 변수가 안쪽에서 동작함
+	for(var i=1;i<=9;i++){
+		document.write(n+"*"+i+"="+n*i+"<br>");
+	}
+}
+printDan(parseInt(prompt("단 입력")));
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

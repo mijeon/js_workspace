@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 1000px;
+            height: 600px;
+            background-color: yellow;
+            margin: auto;
+            overflow: hidden;
+        }
+        #form, #detail-area{
+            width: 150px;
+            height: 100%;
+            background-color: beige;
+            float: left;
+        }
+        #content{
+            width: 700px;
+            height: 100%;
+            background-color: black;
+            float: left;
+        }
+        #search-area{
+            width: 100%;
+            height: 40px;
+            background-color: slategray;
+            text-align: center;
+        }
+        #search-area, select, input, button{
+            height: 30px;
+        }
+        #list-area{
+            width: 100%;
+            height: 560px;
+            background-color: skyblue;
+        }
+        .input-style{
+            background-color: white;
+            border: 1px soild red;
+            font-size: 20px;
+            width: 94%;
+            height: 20px;
+            margin-top: 5px;
+        }
+    </style>
+    <script>
+        //회원정보 출력
+        function printTable(){
+            let list=area=document.getElementById("list-area");
+        }
+        //등록
+        function regist(){
+
+        }
+        window.addEventListener("load", function(){
+            
+            let btRegist=document.getElementById("btRegist");
+            btRegist.addEventListener("click", function(){
+                regist();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="form">
+            <input type="text" placeholder="아이디" class="input-style">
+            <input type="text" placeholder="이름" class="input-style">
+            <input type="text" placeholder="이메일" class="input-style">
+            <input type="text" placeholder="성별" class="input-style">
+            <button id="btRegist">회원등록</button>
+        </div>
+        <div id="content">
+            <div id="search-area">
+                <select id="category">
+                    <option value="">검색유형</option>
+                    <option value="">ID</option>
+                    <option value="">NAME</option>
+                    <option value="">EMAIL</option>
+                    <option value="">GENDER</option>
+                </select>
+                <input type="text" placeholder="검색어 입력">
+                <button>검색하기</button>
+            </div>
+            <div id="list-area"></div>
+        </div>
+        <div id="detail-area">
+            <input type="text" placeholder="아이디" class="input-style">
+            <input type="text" placeholder="이름" class="input-style">
+            <input type="text" placeholder="이메일" class="input-style">
+            <input type="text" placeholder="성별" class="input-style">
+            <button>수정</button>
+            <button>삭제</button>
+        </div>
+    </div>
+</body>
+</html>

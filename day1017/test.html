@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 600px;
+            height: 100px;
+            margin: auto;
+            background-color: black;
+            position:relative;
+        }
+    </style>
+    <script src="../lib/util.js"></script>
+    <script>
+        let lotto=[];
+        let interval;
+        
+
+        function createBall(){
+            let ball=document.createElement("div");
+            ball.style.width=100+"px";
+            ball.style.height=100+"px";
+            ball.style.background="skyblue";
+            ball.style.left=(lotto.length-1)*100+"px";
+            ball.style.position="absolute";
+            ball.style.borderRadius=50+"%";
+            ball.style.textAlign="center";
+            ball.style.fontSize=50+"px";
+            ball.style.paddingTop=15+"px";
+            ball.style.boxSizing="border-box";
+
+            let wrapper=document.getElementById("wrapper");
+            wrapper.appendChild(ball);
+
+            return ball;
+        }
+        function getNum(){
+            let count=0;
+            let n=getRandomWithRange(1, 45);
+            
+            console.log("랜덤수는", n);
+
+            for(let i=0;i<lotto.length;i++){
+                if(lotto[i]==n){
+                    count++;
+                    console.log(n, "에 대한 중복발견");
+                }
+            }
+            if(count<1){
+                lotto.push(n);
+
+                let b=createBall();
+                b.innerText=n;
+            }
+            console.log("현재 배열의 상태는", lotto);
+          
+            if(lotto.length>=6){
+                clearInterval(interval);
+            }
+            
+        }
+        function start(){
+            interval=setInterval("getNum()", 100);
+        }
+        function init(){
+            //createBall();
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper"></div>
+    <button onClick="start()">추첨실행</button>
+</body>
+</html>

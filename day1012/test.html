@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+           #wrapper{
+            width: 100%;
+            height: 700px;
+    
+           background-image: url(../images/night.jpg);
+           background-size: 100% 700px;
+           }
+    </style>
+    <script>
+        var a=0.1;
+        var targetX=300;
+        var targetY=300;
+        var bug;
+
+        function move(){
+            bug.style.left=parseInt(bug.style.left)+ a*(targetX-parseInt(bug.style.left))+"px";  
+            bug.style.top=parseInt(bug.style.top)+ a*(targetY-parseInt(bug.style.top))+"px";  
+        }
+        function setTarget(){
+            console.log();
+            targetX=event.clientX;
+            targetY=event.clientY;
+        }
+        function autoTarget(){
+            targetX=getRandom(1000);
+            targetY=getRandom(1000);
+            setTimeout("autoTarget()", 5000);
+        }
+        function init(){
+            bug=document.getElementById("bug");
+            bug.style.position="absolute";
+            bug.style.left=0+"px";
+            bug.style.top=150+"px";
+
+            setInterval("move()", 10);
+            autoTarget();
+        }
+    </script>
+    <script>
+        function getRandom(n){
+            return parseInt(Math.random()*n);
+        }
+        function getRandomWriteRange(min, max){
+            var result=min+parseInt(Math.random()*(max-min+1));
+            return result;
+        }
+    </script>
+</head>
+<body onLoad="init()" onMousedown="setTarget()">
+    <div id="wrapper" onClick="move()">
+    <button >수동테스트</button>
+    <img src="../images/bug.png" alt="" id="bug">
+    </div>
+</body>
+</html>

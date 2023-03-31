@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 1150px;
+            height: 700px;
+            background-color: yellow ;
+            margin: center;
+        }
+        #control{
+            width: 150px;
+            height: 100%;
+            background-color: #E6E6FA	;
+            float: left;
+            text-align: center;
+        }
+        #control select{
+            width: 97%;
+            height: 30px;
+            text-align:center;
+            background-color: gray;
+            color:white;
+            font-weight:bold;
+        }
+        #control input{
+            width: 93%;
+            height: 50px;
+            margin-top: 10px;
+            margin-bottom: 10px;         
+        }
+        #hp-area{
+            width: 100%;
+            height: 160px;
+            background-color: beige;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        #item-area{
+            width: 100%;
+            height: 100px;
+            background-color: beige;
+            margin-bottom: 10px;
+        }
+        #score-area{
+            width: 100%;
+            height: 100px;
+            background-color: beige;
+            text-align: center; 
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        #content{
+            width:1000px;
+            height:100%;
+            background-color: #6495ED;
+            float: left;
+            position: relative;
+        }
+    </style>
+    <script src="../lib/util.js"></script>
+    <script>
+        let wordArray=["감자","오이","당근","방울토마토","아보카도","양배추","양파","파프리카","두부","콩"];
+        let spanArray=new Array(wordArray.length);
+        let step=5;
+        let flag=false;
+        let hpArray=[];
+        let textIn;
+
+        //5
+        function createWord(){
+            for(let i=0;i<wordArray.length;i++){
+                let span=document.createElement("span");
+                span.innerText=wordArray[i];
+                span.style.position="absolute";
+                span.style.left=30+(i*100)+"px";
+                span.style.top=getRandomWithRange(-80, 80)+"px";
+                span.style.background="black";
+                span.style.color="#ffffff";
+                span.style.fontSize=20+"px";
+    
+                let content=document.getElementById("content");
+                content.appendChild(span);
+
+                spanArray[i]=span;  
+            }
+        }
+        //6
+        function moveDown(){
+            if(flag){
+                for(let i=0;i<spanArray.length;i++){
+                    spanArray[i].style.top=parseInt(spanArray[i].style.top)+step+"px";
+
+                    if(parseInt(spanArray[i].style.top)+20>=700){
+                        console.log(spanArray[i].innerText, "를 놓쳤어요");
+
+                        let content=document.getElementById("content");
+
+                        content.removeChild(spanArray[i]);
+                        wordArray.splice(i,1);
+                        spanArray.splice(i,1);
+                        handleHp();
+                    }
+                }
+            }
+        }
+        function handleHp(){
+            for(let i=0;i<hpArray.length;i++){
+                if(hpArray[i].style.background!="gray"){
+                    hpArray[i].style.background="gray";
+                    break;
+                }               
+            }
+        }
+        function game(){
+            flag=!flag;
+            if(flag){
+                let textIn=document.getElementById("textIn");
+                textIn.focus();
+            }else{
+                let textIn=document.getElementById("textIn");
+                 textIn.blur();
+            }
+
+        }
+        // function pause(){
+        //     flag=false;
+        //     let textIn=document.getElementById("textIn");
+        //     textIn.blur();
+        // }
+        //4
+        function setBg(file){
+            let content=document.getElementById("content");
+            content.style.background="url(../images/"+file+")";     
+            
+            content.style.backgroundSize="100% 100%";
+        }
+        //3
+        function creatHp(){
+            for(let a=0;a<4;a++){  //높이
+                for(let i=0;i<3;i++){  //너비
+                    let hp=document.createElement("div");
+                    hp.style.width=50+"px";
+                    hp.style.height=40+"px";
+                    hp.style.background="red";
+                    hp.style.position="absolute";
+                    hp.style.left=(i*50)+"px";
+                    hp.style.top=(a*40)+"px";
+                    hp.style.border="1px solid #E6E6FA";
+        
+                    let hpArea=document.getElementById("hp-area");
+                    hpArea.appendChild(hp);
+
+                    hpArray.push(hp);
+                }
+            }
+        }
+        function enterKey(){
+            let textIn=document.getElementById("textIn");
+            //textIn.value;
+            for(let i=0;i<spanArray.length;i++){
+                if(textIn.value==spanArray[i].innerText){
+                    //alert("맞았어?");
+
+                    let content=document.getElementById("content");
+                    content.removeChild(spanArray[i]);
+                    wordArray.splice(i,1);
+                    spanArray.splice(i,1);
+
+                    textIn.value="";
+                }
+            }
+        }
+        //2
+        function init(){
+            creatHp();
+            createWord();
+            setInterval("moveDown()", 50);
+        }
+        //1
+        window.addEventListener("load", function(){
+            init();
+            //4
+            document.querySelector("select").addEventListener("change", function(){
+                console.log("선택한 배경은", this.value);
+                setBg(this.value);
+            });
+            document.getElementById("textIn").addEventListener("keyup", function(e){
+                //console.log(e);
+                if(e.keyCode==13){
+                    enterKey();
+                }
+            });
+         });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="control">
+            <select name="" id="">
+                <option value="" selected disabled>배경선택</option>
+                <option value="bg1.jpg">배경1</option>  
+                <option value="bg2.jfif">배경2</option> 
+                <option value="bg3.jpg">배경3</option> 
+            </select>
+            <input type="text" placeholder="단어입력" id="textIn">
+            <div id="hp-area"></div>         
+            <div id="item-area"></div>         
+            <div id="score-area">100점</div>      
+            <button onClick="game()">Start</button>   
+            <button onClick="game()">Pause</button>   
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

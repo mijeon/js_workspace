@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 700px;
+            height: 750px;
+            background-color: dimgrey;
+            margin: auto;
+        }
+        #control{
+            width: 100%;
+            height: 100px;
+            background-color: dimgray;
+            text-align: center;
+            font-size: 45px;
+            color: white;
+        }
+        #day-area{
+            width: 100%;
+            height: 60px;
+            background-color: darkgray;
+        }
+        #day-area ul{
+            list-style: none;
+        }
+        #day-area li{
+            float: left;
+            width: 93px;
+            font-size: 30px;
+        }
+        #content{
+            width: 100%;
+            height: 600px;
+            background-color: dimgrey;
+            position: relative;
+            text-align: center;
+        }
+    </style>
+    <script src="./classee/Cell.js"></script>
+    <script src="../lib/util.js"></script>
+    <script>
+        let content;
+        let container;
+        let cellArr=[];
+        let dayText=["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+        let dayTitle;
+        let current_yy;
+        let current_mm;
+
+        function createContainer(){
+            container=document.createElement("div");
+            container.style.position="absolute";
+            container.style.left=0+"px";
+            container.style.top=0+"px";
+            container.style.width=714+"px";
+            container.style.height=612+"px";
+
+            content.appendChild(container);
+        }
+        function createCell(){
+            let num=0;
+            for(let i=0;i<6;i++){
+                let arr=[];
+                for(let a=0;a<7;a++){
+            
+                    num++;
+                    //constructor(container, x, y, width, height, num, msg)
+                    let cell=new Cell(container, a*100, i*100, 100, 100, num, num+"일 일정");
+                    arr.push(cell);
+                }
+                cellArr.push(arr);
+            }
+        }
+        //무슨 요일
+        function getStartDayOfWeek(year, month){
+            let d=new Date(year, month);
+            console.log("이번달은", dayText[d.getDay()], "부터 시작합니다.");
+            return d.getDay();
+        }
+        //며칠까지
+        function getTotalDate(year, month){  //consol창에 getTotalDate(year, month) 함수 확인
+            let d=new Date(year, month+1);
+            d.setDate(0);
+            console.log("해당 월은", d.getDate(), "일까지 입니다.");
+            return d.getDate();
+        }
+        //셀에 채우기
+        function printDate(year, month){
+            let d=new Date();
+            //let year=d.getFullYear();  
+            //let month=d.getMonth(); 
+            
+            let startDay=getStartDayOfWeek(year, month);
+            let totalDate=getTotalDate(year, month);
+
+            let n=0;  //순서를 알려주는 변수
+            let num=1;  //실제 날짜
+
+            for(let i=0;i<6;i++){
+                for(let a=0;a<7;a++){
+                    if(n>=startDay && num<=totalDate){
+                        cellArr[i][a].numDiv.innerText=num;
+                        cellArr[i][a].msgDiv.innerText=num+"일 일정";
+                        num++;
+                    }else{
+                        cellArr[i][a].numDiv.innerText="";
+                        cellArr[i][a].msgDiv.innerText="";
+                    }
+                    n++;
+                }
+            }
+        }
+
+        //달력의 날짜 제목 출력
+        function printTitle(){
+            dayTitle.innerText=current_yy+"년"+getDateString((current_mm+1))+"월";
+        }
+
+        function prev(){
+            let d=new Date(current_yy, current_mm-1);
+            current_yy=d.getFullYear();
+            current_mm=d.getMonth();
+
+            printTitle();
+            printDate(current_yy, current_mm);
+        }
+
+        function next(){
+            let d=new Date(current_yy, current_mm+1);
+            current_yy=d.getFullYear();
+            current_mm=d.getMonth();
+
+            printTitle();
+            printDate(current_yy, current_mm);
+        }
+        function init(){
+            content=document.getElementById("content");
+            dayTitle=document.getElementById("day-title");
+
+            createContainer();
+            createCell();
+
+            let d=new Date();
+            current_yy=d.getFullYear();
+            current_mm=d.getMonth();
+            printTitle();
+            printDate(current_yy, current_mm);
+
+            document.getElementById("bt-prev").addEventListener("click", function(){
+                prev();
+            });
+
+            document.getElementById("bt-next").addEventListener("click", function(){
+                next();
+            });
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="control">
+            <button id="bt-prev">이전</button>
+            <span id="day-title"></span>
+            <button id="bt-next">다음</button>
+        </div>
+        <div id="day-area">
+            <ul>
+                <li>Sun</li>
+                <li>Mon</li>
+                <li>Thus</li>
+                <li>Wed</li>
+                <li>thur</li>
+                <li>Fri</li>
+                <li>Sat</li>
+            </ul>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width: 800px;
+            height: 500px;
+            background-color: antiquewhite;
+            overflow:hidden;
+        }
+        #t_area{
+            width: 400px;
+            height:100%;
+            background-color:beige;
+            float:left;
+        }
+        #content{
+            width: 400px;
+            height:100%;
+            background-color: green;
+            float:left;
+        }
+    </style>
+    <script>
+        var imgArray=[
+            "../images/h1.png",
+            "../images/h2.png",
+            "../images/h3.png",
+            "../images/h4.png",
+            "../images/h5.png",
+            "../images/h6.png",
+            "../images/h7.png",
+            "../images/h8.png",
+            "../images/h9.png",
+            "../images/h10.png"
+        ];
+    </script>
+    <script>
+        var t_area;
+        var content;
+
+        function createThumb(){
+            var img=document.getElementById("img");
+            img.src="../images/"+imgArray[0];
+            
+            
+        }
+        function init(){
+           t_area=document.getElementById("t_area");
+           content=document.getElementById("content");
+
+        }
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="t_area"></div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

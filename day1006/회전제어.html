@@ -1,0 +1,40 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>회전제어</title>
+<style>
+
+</style>
+<script>
+var r=0;  //이미지의 각도를 누적시킬 전역변수
+var flag=false;
+//문서 내의 pic이라는 이미지를 회전시키는 함수
+function rotateImg(){
+	var pic=document.getElementById("pic");
+	if(flag){
+	r+=2;
+	pic.style.transform="rotate("+r+"deg)";
+	}
+	setTimeout("rotateImg()", 10);  //무한루프에 빠질 수 있으므로 setTimeout로 속도를 조절해줌
+}
+function trun(){
+	//1. flag 뒤집기
+	flag=!flag;
+	//2. 스위치 이미지 전환
+	if(flag){
+		document.getElementById("sw").src="../images/switch_on.png";  //on
+	}else{
+		document.getElementById("sw").src="../images/switch_off.png"//off
+	}
+}
+</script>
+</head>
+<body align="center" onLoad="rotateImg()">  <!--onLoad=alert("문서 다 돌아갔어")-->
+	<img src="../images/switch_off.png" onClick="trun()" id="sw">
+	<img src="../images/rocket.png" id="pic">
+</body>
+</html>

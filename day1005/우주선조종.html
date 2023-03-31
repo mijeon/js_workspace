@@ -1,0 +1,76 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+body{
+	background-image:url(../images/game.jpg);
+	}
+img{
+	width:70px;
+	position:absolute; /*부모 요소를 기준으로 한 위치*/
+	left:100px;
+	top:100px;
+}
+</style>
+<script>
+var x=200;
+var y=200;
+var posX=0;  //배경에 x좌표 값을 누적시킬 변수
+
+//배경을 자동으로 움직이게 하자
+function moveBg(){  //함수를 메모리에 저장
+	posX-=2;
+	document.body.style.backgroundPosition=posX+"px 0px";  // x축 y축
+	//document.body.style.backgroundPosition="0px "+posX+"px";  // x축 y축
+	setTimeout("moveBg()", 10); //무한루프, 10/1000초 뒤에 지정한 함수 호출
+}
+//moveBg(); 아직 boddy 태그를 읽은적이 없으므로, 존재하지 않는 타이밍에
+//접근하려면 null 에러가 발생
+
+function moveDown(){
+	y+=100;
+	var pic=document.querySelector("img"); 
+	pic.style.top=y+"px";
+}
+function moveUp(){
+	var pic=document.querySelector("img"); //너무 길어서 변수로 담음
+	y-=100;
+	pic.style.top=y+"px";
+}
+function moveLeft(){
+	x-=100; //x=x-5;와 동일
+	document.querySelector("img").style.left=x+"px";
+	}
+function moveRight(){
+	//console.log("나 눌렀어?");    /*개발자 도구(F12) -> console에서 확인*/
+	//문서 내의 img 태그에 적용된 style의 left 값을 5씩 증가시키자
+	x+=100;
+	document.querySelector("img").style.left=x+"px";
+}
+</script>
+</head>
+<body>
+	<table border="1px">
+    <tr>
+        <td></td>
+        <td><input type ="button" value="▲" onclick="moveUp()"></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><input type ="button" value="◀" onclick="moveLeft()"></td>
+        <td><input type ="button" value="▼" onclick="moveDown()"></td>
+        <td><input type ="button" value="▶" onclick="moveRight()"></td>
+    </tr>
+</table>
+	<img src="../images/plane.png">
+</body>
+</html>
+<script>
+//body가 완전히 로드된 후 접근
+moveBg();
+</script>

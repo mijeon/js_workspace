@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포인터갤러리</title>
+    <style>
+        #wrapper{
+            width: 800px;
+            height:500px;
+            background-color: aqua;
+            margin: auto;
+            overflow: hidden;
+        }
+        #thumb_area{
+            width: 400px;
+            height: 100%;
+            background-color: beige;
+            float: left;
+        }
+        #content{
+            width: 400px;
+            height: 100%;
+            background-color: green;
+            float: left;
+        }
+    </style>
+    <script src="../lib/data.js"></script>  <!--1-->
+    <script>
+        //다른 함수에서도 접근할 수 있도록 전역변수로 빼놓자  //5
+        var thumb_area;
+        var content;
+        var big;  //크게 볼 이미지 //9
+
+        //썸네일 만들기 //4
+        function createThumb(){  
+            for(i=0;i<nameArray.length;i++){
+                var img=document.createElement("img");
+                img.src="../images/"+nameArray[i];
+
+                //썸네일 영역에 생성된 이미지 부착하자 //7
+                img.style.width=100+"px";
+                img.style.height=100+"px";
+                thumb_area.appendChild(img);
+
+                //부착된 썸네일에 이벤트 리스너 연결
+                img.addEventListener("click", function(){  //8
+                //alert("나눌렀어?");
+                //지금 선택한 이미지 정보를 이용하여 big 이미지에 적용 //8
+
+                 //click 이벤트가 동작해야 i값이 들어가므로 해당 코드는 작동하지 않음
+                console.log(nameArray[i]);
+                bic.src="../images/"+nameArray[i]; 
+                });
+            }          
+        }
+        //프로그램에 필요한 것들을 준비하는 함수 //3
+        function init(){  
+            thumb_area=document.getElementById("thumb_area");  //6
+            content=document.getElementById("content");
+            createThumb();
+            big=document.getElementById("big");
+
+            createThumb();
+
+        }
+        window.addEventListener("load", function(){  //2
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="thumb_area"></div>
+        <div id="content"><img id="big"></div>  <!--9. big-->
+    </div>
+</body>
+</html>

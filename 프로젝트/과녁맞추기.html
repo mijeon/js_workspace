@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>과녁맞추기</title>
+    <link 
+    href="https://fonts.googleapis.com/css?family=Press+Start+2P" 
+    rel="stylesheet">
+    <style>
+        body{margin:0px;}
+        #stage{
+            background-image: url(../images/들판.jpg);
+            overflow: hidden;
+        }
+        *{
+            font-family: 'Press Start 2P', cursive;
+        }
+    </style>
+   <script src="./classes/Squre.js"></script>
+   <script src="./classes/Arrow.js"></script>
+   <script src="./classes/Start.js"></script>
+   <script src="../lib/util.js"></script>
+
+    <script>
+        let stage;
+        let colorArr=[ "yellow", "red","powderblue", "black", "whitesmoke"];
+        let fontColor=["black", "black", "black", "white", "black"];
+        let circleArr=[];
+        let squreArr=[];
+        let flag=true;
+        let gameFlag=true;
+        let start;
+        let hpArr=[];
+        let arrowArr = [];
+        let hpCnt = 9;
+        let pauseFlag = true;
+        let score=0;
+        let sum=0;
+        let scoreDiv;
+        let count=0;
+        const REPEAT_LIMIT=150;
+        let repeatCount=REPEAT_LIMIT; //과녁이 왔다갔다할 주기 타이밍을 결정지을 변수
+        let gameover;  //게임이 종료 시 나오는 문구
+        
+
+        //네모 과녁 만들기
+        function createSqure(){
+            //constructor(container, x, y, width, height, velY, bg, text, id, textpos, fontColor)
+            for(let i=colorArr.length-1;i>=0;i--){  
+                let squre=new Squre(stage, 1700+(i*20), 100+(i*-25), 20, (i+1)*50, 0, colorArr[i], 
+                (colorArr.length-i)*10, i, i*25, fontColor[i]);
+                squreArr.push(squre);  
+            }   
+        }
+
+        //과녁 상하로 움직이기
+        function move(){   
+            for(let i=0;i<squreArr.length;i++){
+                let step=0;
+                let rect = squreArr[i];
+
+                if(i==0){  //제일 바깥쪽 과녁만 움직이기
+                    repeatCount--;
+                    if(repeatCount<=0){
+                        flag=!flag;
+                        repeatCount=REPEAT_LIMIT;
+                    }
+                }
+                step = (flag) ? 5: -5 ;
+                rect.y=rect.y+step;
+                rect.render();                
+            }  
+        }
+
+        //게임 횟수 만들기
+        function createHp(){
+            for(let i=0;i<10;i++){
+                let hp=document.createElement("img");
+                hp.src="../images/hearts.png";
+                hp.style.left=100+50*i+"px";
+                hp.style.top=50+"px";
+                hp.style.width=50+"px";
+                hp.style.height=50+"px";
+                hp.style.position="absolute";
+                
+                stage.appendChild(hp);
+                hpArr.push(hp);
+            }
+        }
+
+        //주인공 만들기
+        function setArrow(){
+            //constructor(container, src, x, y, width, height, velX, velY)
+            start=new Start(stage, "../images/활쏘는사람.png", 100, 500, 200, 200, 0, 0);
+        }
+
+        //화살 발사
+        function shoot(){
+            if(gameFlag){
+                if(hpCnt>=0){  //게임횟수 만큼 화살 발사됨
+                    stage.removeChild(hpArr[hpCnt]);
+                    hpArr.splice(hpArr.length-1,1);
+                    hpCnt--;
+                    //constructor(container, src, x, y, width, height, velX, velY)
+                    let arrow=new Arrow(stage, "../images/angryBird3.png", start.x+(start.width/2), start.y-20, 30, 30, 20, -4, 3);
+                    arrowArr.push(arrow);          
+                }
+                if(hpCnt<0){
+                    gameFlag = false;
+
+                    setTimeout('gameOver()',2000);
+                }
+            }
+        }
+        //게임 종료
+        function gameOver(){
+            gameover=document.createElement("div");
+            gameover.style.position="absolute";
+            gameover.style.left=300+"px";
+            gameover.style.top=350+"px";
+            gameover.style.fontSize=150+"px";
+            gameover.innerText="Game Over"
+
+            stage.appendChild(gameover);
+            setTimeout("document.location.reload()", 5000);  //브라우저 새로고침 효과
+        }
+        //점수 
+        function createScore(){
+            scoreDiv=document.createElement("div");
+            scoreDiv.style.left=110+"px";
+            scoreDiv.style.top=120+"px";
+            scoreDiv.style.width=500+"px";
+            scoreDiv.style.height=50+"px";
+            scoreDiv.style.fontWeight="bold";
+            scoreDiv.style.fontSize=35+"px";
+            scoreDiv.style.color="whitesmoke";
+            scoreDiv.style.position="absolute";
+                
+            stage.appendChild(scoreDiv);  
+            printScore();
+        }
+
+        function printScore(){
+            scoreDiv.innerText="score : "+sum;
+        }
+        //주인공 움직이기
+        function moveY(n){
+            start.velY=n;
+        }
+
+        //주인공 멈추기
+        function moveY(n){
+            start.velY=n;
+        }
+
+        function gameLoop(){
+            //화살 루프 호출
+            if(pauseFlag){
+                for(let i=0; i<squreArr.length;i++){  
+                    if(arrowArr[i] != undefined){
+                        arrowArr[i].tick();
+                        arrowArr[i].render();
+                    }
+                }
+                start.tick();
+                start.render();
+            }
+            move();
+
+            setTimeout("gameLoop()", 10);
+        }
+        
+        function init(){
+            stage = document.getElementById("stage");
+            stage.style.width=100+"%";
+            stage.style.height=930+"px";
+            stage.style.position="relative";
+
+            createSqure();
+            setArrow();
+            createHp();
+            createScore();
+            gameLoop();
+            
+            //화살 이벤트
+            document.body.addEventListener("keydown", function(e){
+                switch(e.keyCode){
+                    case 38:moveY(-10);break;
+                    case 40:moveY(10);break;
+                    case 32:shoot();break;
+                    case 27:pauseFlag=!pauseFlag;break;
+                }
+            })
+    
+            //화살 이벤트
+            document.body.addEventListener("keyup", function(e){
+                switch(e.keyCode){
+                    case 38:moveY(0);break;
+                    case 40:moveY(0);break;
+                }
+            })
+        }
+
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="stage"></div>
+</body>
+</html>

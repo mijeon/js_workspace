@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>점심뭐먹을래요</title>
+    <style>
+        #wrapper{
+            width: 300px;
+            height: 300px;
+            background-color: skyblue;
+            margin: auto;
+        }
+    </style>
+    <script src="../lib/util.js"></script>  <!--9--> 
+    <script>
+        let food=["food.png", "food(1).png", "food(2).png", "food(3).png", "food(4).png", "food(5).png", "food(6).png", "food(7).png"];  //8
+        let content;  //div
+        let img  //지금 현재 생성된 이미지  //13
+        let a=0.1;  //기울기
+        let targetX=0;  //이미지가 도달할 목표지점
+
+        //이미지명을 반환하는 함수 (이미지 자체가 아님)
+        function getRandomImg(){  ////console창에 getRandomImg(); 입력
+            return food[getRandom(food.length)];   //10
+            //return : 함수 실행을 종료하고 주어진 값을 가지고 함수 호출지점으로 반환
+        }
+       
+       //15) content에 부착된 이미지의 위치를 left값 0을 향해서 수렴할 수 있도록
+       //감속도 처리를 하자
+       function move(){
+        //이미지 위치 = 현재 이미지 위치+ 일정비율*(남은거리)
+        //이미지 위치 = 현재 이미지 위치+ 일정비율*(목표지점-현재 이미지 위치)
+       if(img !=undefined){  //16-1) 이미지가 생성되면
+            img.style.left=parseFloat(img.style.left)+a*(targetX-parseFloat(img.style.left))+"px";
+            console.log(img.style.left);
+       }
+    }
+        //7) 이미지를 동적으로 생성하여, content div에 부착해보자
+        function execute(){  
+            //기존에 만약 이미지 객체가 존재한다면, 제거 
+            if(img !=undefined){  //14
+                content.removeChild(img);  //이미지가 존재할 때만 제거 //13
+            }
+            img=document.createElement("img");  //<img></img>  //전역변수로 선언_13
+            img.src="../images/"+getRandomImg();  //어떤 사진? //유틸리티 경로는 빠져있으므로 넣어줌 //10
+            img.style.position="absolute";  //14
+            img.style.left=-300+"px";  //자식 포지션이 결정되었을 때 부모 포지션도 명시해줘야함
+            img.style.width=300+"px";
+            img.style.height=250+"px";
+
+            //content div에, 지금 만든 이미지객체를 붙이자  //11
+            content.appendChild(img);
+        }
+        //16)프로그램에서 무언가를 지속적으로 움직이게 하려면, 즉 애니메이션 효과를 
+        //주려면, 지속적인 호출을 시도하는 루프를 만들어야 하는데 
+        //주의할 점은 특별한 경우가 아니라면, 루프를 하나만 두어야 함
+        function gameloop(){
+            setInterval("move()", 10);  //한번만 작성
+        }
+        function init(){
+            //div를 동적으로 만들어 wrapper에 넣기  //1
+            //js에서 데이터를 메모리에 올릴 때 변수를 사용한다
+            //변수 선언 방법은 3가지가 있다
+            //1. var 2. let 3. const , 2015ES6(클래스, let, cons)
+            content=document.createElement("div");   //전역함수로 선언하여 let뺌
+            content.style.width=300+"px";  
+            content.style.height=250+"px";
+            content.style.background="beige";
+            //content.id="content";  //<div id="content"></div>  //12
+            //14-1) 자식인 img가 position을 명시하면, 부모도 반드시 position을 
+            //명시해야 한다 현재 content에 우리가 아무것도 명시하지 않았기 때문에
+            //디폴트는 relative이지만 명시해야 함
+            content.style.position="relative";
+            //14-2)div의 내용을 벗어난 컨텐츠에 대해 어떻게 할지를 결정
+            content.style.overflow="hidden";  //마지막에 작성
+
+            //버튼생성 //2
+            let button =document.createElement("button");  //<button></button>
+            button.innerText="추천실행";  //<button>추천실행</button>
+            
+
+            //wrapper에 자식으로 부착  //3
+            let wrapper=document.getElementById("wrapper");
+            wrapper.style.textAlign="center";  //5
+
+            //버튼과 라스너 연결  //6
+            button.addEventListener("click", function(){
+                execute();
+            });
+
+            wrapper.appendChild(content);
+            wrapper.appendChild(button);  //4
+
+        }
+        window.addEventListener("load", function(){  
+            init();
+            gameloop();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper"></div>
+</body>
+</html>

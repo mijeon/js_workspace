@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>member</title>
+    <style>
+        #wrapper{
+            width: 700px;
+            height: 500px;
+            background-color: black;
+            margin: auto;
+
+        }
+        #input-area{
+            width: 150px;
+            height: 100%;
+            background-color: whitesmoke;
+            float: left;
+            text-align: center;
+        }
+        #input-area div{
+            margin-bottom: 5px;
+        }
+        #content{
+            width: 550px;
+            height: 100%;
+            background-color: powderblue;
+            float: left;
+        }
+    </style>
+    <script>
+        let memberArr=[];  //4
+
+        //1 입력 양식의 내용을 메모리에 저장해두자, java 수업이었다면 db에 저장가능
+        function regist(){
+            //한사람에 대한 정보를 기존에는 일차원 배열에 담아왔으나
+            //배열은 index를 사용하기 때문에 이름, 급여, 아이디 등을 
+            //개발자가 몇번째 index에 넣었는지 사전에 알고 있어야 하는 단점이 있음
+            //해결책) 직관성이 있으면서, 데이터 접근을 index가 아닌 
+            //변수명으로 접근하는 방법 = 개체를 사용하면 됨 (반복문을 돌릴 수 있음)
+            
+            //4-1
+            //문자열로 선언하지 않은 상태이므로, parsing 과정이 필요없음
+            //즉, JSON 내장객체로 봐도 무관함
+            let json={};
+
+            //비어있는 json 객체에 동적으로 변수명과 데이터를 할당함
+            json["jumin1"]=document.getElementsByName("jumin")[0].value;
+            json["jumin2"]=document.getElementsByName("jumin")[1].value;
+
+            let checkedValue;
+            if(document.getElementsByName("gender")[0].checked){  //남자가 체크되어 있다면
+                checkedValue=document.getElementsByName("gender")[0].value;  //json["jender"]
+            }else{  //여자가 체크되어 있다면
+                checkedValue=document.getElementsByName("gender")[1].value;  
+            }
+            json["gender"]=checkedValue;
+            json["id"]=document.getElementsByName("id")[0].value;
+            json["name"]=document.getElementsByName("name")[0].value;
+
+            //숫자가 아닌 것을 걸러내는게 목적
+            if(isNaN(document.getElementsByName("sal")[0].value)){ 
+                alert("숫자를 입력해주세요.");
+                document.getElementsByName("sal")[0].focus();
+                return;
+            }
+            json["sal"]=document.getElementsByName("sal")[0].value;
+
+            console.log("현재까지 완성된 json", json);
+            //완성된 한사람에 대한 정보를 배열에 넣자
+            memberArr.push(json);
+            
+        }
+        //5 등록된 json 목록을 table로 출력하기
+        function getList(){
+            let tag="<table width='100%' border='1px'>";
+                tag+="<tr>";
+                    tag+="<td>주민앞자리</td>";
+                    tag+="<td>주민뒷자리</td>";
+                    tag+="<td>성별</td>";
+                    tag+="<td>아이디</td>";
+                    tag+="<td>이름</td>";
+                    tag+="<td>희망연봉</td>";
+                tag+="</tr>";
+
+                for(let i=0;i<memberArr.length;i++){  //일차원 배열
+                    let json=memberArr[i];  //배열로부터 json 추출
+                    tag+="<tr>";
+                        tag+="<td>"+json.jumin1+"</td>";
+                        tag+="<td>"+json.jumin2+"</td>";
+                        tag+="<td>"+json.gender+"</td>";
+                        tag+="<td>"+json.id+"</td>";
+                        tag+="<td>"+json.name+"</td>";
+                        tag+="<td>"+json.sal+"</td>";
+                    tag+="</tr>";
+                }
+            tag+="</table>";
+
+            document.getElementById("content").innerHTML=tag;
+        }
+        //2 키보드를 눌렀다 땔 때, 7자 이상일 경우, 제일 첫번째 자리의 문자를 추출하여
+        //1이면 남자 2이면 여자 판단하여, 옵션태그에 반영해보자
+        function checkGender(data){
+            //string 객체는 문자열이기 때문에 new 연산자로 명시하지 않아도
+            //객체로 보아야 함
+            //ex) let s="korea";  string 객체임 따라서, s.점 찍고 
+            //string의 객체 api를 사용할 수 있음
+            //data 매개변수는 문자열이 전달되므로 문자열은 string 객체임
+            //따라서 data 변수에 점찍고 string api 사용가능함
+            //console.log("현재까지 입력한 문자열의 길이는", data.length);
+            if(data.length>=7){
+                //문자열의 제일 앞자를 추출함
+                let g=parseInt(data.charAt(0));  //"1", "0" 쌍따움표 제거하여 정수화 시킴
+                console.log("당신의 성별 코드는", g);
+                if(g==1){
+                    document.getElementsByName("gender")[0].checked=true;
+                }else{
+                    document.getElementsByName("gender")[1].checked=true;
+                }
+            }
+        }
+
+        //3 
+        function toLowerString(obj){  
+            //매개변수로, 이벤트를 일으킨 컴포넌트인 input이 전달됨
+            console.log("커서 벗어남?");
+            //아이디 입력 박스의 값을 소문자로 자동변경하고 대입하자
+            obj.value=obj.value.toLowerCase();
+            
+            
+        }
+        function init(){
+            //버튼에 이벤트 연결
+            document.querySelector("button").addEventListener("click", function(){
+                regist();
+                getList();
+            });
+        }
+        addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="input-area">
+            <form>
+                <input type="text" placeholder="주민번호 앞자리" size="10" name="jumin" maxlength="6">
+                <input type="text" placeholder="주민번호 뒷자리" size="10" name="jumin" maxlength="7" onkeyup="checkGender(this.value)">  <!--스트링 객체-->
+                <div>
+                    남<input type="radio" name="gender" value="남">
+                    여<input type="radio" name="gender" value="여">
+                </div>
+                <div>
+                    <input type="text" name="id" placeholder="아이디 입력" size="15" onblur="toLowerString(this)">  <!--input 객체-->
+                </div>
+                <div>
+                    <input type="text" name="name" placeholder="이름 입력" size="15">
+                </div>
+                <div>
+                    <input type="text" name="sal" placeholder="희망연봉 입력" size="15">  <!--type="number"-->
+                </div>
+                <div>
+                    <button type="button">등록</button>  <!-- 원래는 type="submit" -->
+                </div>
+            </form>
+    </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

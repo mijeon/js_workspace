@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키보드조작</title>
+    <style>
+        #stage{  /*id 선택자*/
+            width: 1000px;
+            height: 600px;
+            margin: auto;
+            background-image: url(../images/game.jpg);
+            /* 자식에 position이 지정되면, 반드시 부모도 position이
+            지정되어야 함 */
+            position: relative;  /*본연의 위치*/
+        }
+        /* 모든 태그 요소는 개발자가 지정하지 않으면, 디폴트로
+        relative(상대위치 0,0) 포지션이 지정됨 */
+        #pic{
+            width: 70px;
+            position: absolute; /*부모를 기준으로 한 위치 속성*/
+            left:200px;  /*x좌표 초기값*/
+            top:100px;
+
+        }
+    </style>
+    <script>
+        var x=200;  //비행기의 x좌표 값(전역변수), 초기값과 동일하게 줘야함
+        var y=100;  //비행기의 y좌표 값(전역변수)
+        var bgX=0;  //배경 이미지의 x좌표
+
+        function move(){
+            //문서 내의 pic의 left 값을 증가시켜보자
+            var pic=document.getElementById("pic");
+
+            //키보드의 key값중 우측 방향키를 눌렀을 때만
+            console.log(event.keyCode);
+            if(event.keyCode==37){  //좌측
+                x-=10;               
+                console.log("좌측으로 갈게요");
+            }
+            else if(event.keyCode==38){  //위측
+                y-=10;
+                console.log("위로 갈게요");
+            }
+            else if(event.keyCode==39){  //우측 키보드의 ASCII 코드값
+                x+=10;  //전역변수에 10 누적
+                console.log("우측으로 갈게요");
+            }
+            else if(event.keyCode==40){  //아래측
+                y+=10;
+                console.log("아래로 갈게요");
+            }
+            pic.style.left=x+"px";
+            pic.style.top=y+"px";
+        }
+
+        //배경 자동으로 움직이기
+        function bgEffect(){
+            //문서 내의 stage 요소에 설정된 배경 이미지의 위치를
+            //음의 방향으로 움직여보자(x좌표만)
+            var stage=document.getElementById("stage");
+            bgX-=2;
+            stage.style.backgroundPosition=bgX+"px 0px";
+            setTimeout("bgEffect()", 10);  //1000/10로 한번 호출(재귀호출)
+        }
+    </script>
+</head>
+<body onKeyDown="move()" onLoad="bgEffect()">
+    <div id="stage">
+        <img src="../images/plane.png" id="pic">
+    </div>
+</body>
+</html>

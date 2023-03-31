@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    #wrapper{
+        width: 600px;
+        height:600px;
+        background-color: yellowgreen;
+        margin: auto;
+    }
+    #info{
+        width: 100%;
+        height: 50px;
+        background-color: gainsboro;
+        text-align: center;
+        font-size: 30px; color:#666666;
+    }
+    #content{
+        width: 100%;
+        height: 500px;
+        background-color: gainsboro;
+    }
+    #control{
+        width: 100%;
+        height: 50px;
+        background-color: lightsteelblue;
+        text-align: center;
+    }
+    #content img{
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+    <script>
+        var photo=new Array(10);  //메모리에 비어있는 공간을 10개 생성
+        var n=0;  //몇번째 배열을 볼지 결정짓는 전역변수
+        var st;  //현재 진행중인 자동호출 함수를 가르키는 전역변수
+
+        function next(index){
+            //문서 내의 큰 이미지의 src를 다음 사진이 나오게 처리
+            var big=document.getElementById("big");
+            big.src="../images/sea/"+photo[index];
+            //정보출력
+            var info=document.getElementById("info");
+            info.innerHTML="<marquee>"+photo[index]+"</marquee>";
+        }
+        function nextPhoto(){
+            //지금 보고있는 사진의 다음 사진보기
+            if(n<9){
+                n++;  //0~9까지만 유효함
+            next(n);
+            }else{
+                alert("그만 눌러");
+            }
+        }
+        function prevPhoto(){
+            if(n>0){
+                n--;
+            next(n);
+            }else{
+                alert("그만 눌러");
+            }  
+        }
+        //자동이란, 이미 구현해 놓은 수동구현을 컴퓨터가
+        //자동으로 호출해주는 것이다
+        function startAuto(){
+            st=setInterval("nextPhoto()", 2000);
+        }
+        //프로그램이 가동되면, 이 갤러리 프로그램에서 사용할 이미지명들을
+        //순서있게 메모리에 띄우자, 이유는? 순서없는 이미지라서
+        //갤러리에 구현 불가능하므로
+        function init(){
+           
+            photo[0]="abc.jfif";
+            photo[1]="amgy.jfif";
+            photo[2]="rrt.jfif";
+            photo[3]="ney.jfif";
+            photo[4]="mop.jfif";
+            photo[5]="eert.jfif";
+            photo[6]="ccv.jfif";
+            photo[7]="api.jfif";
+            photo[8]="kko.jfif";
+            photo[9]="bbnj.jfif";
+
+            next(n);
+        }
+    </script>
+</head>
+<body onLoad="init()">
+    <div id="wrapper">
+        <div id="info">text.png</div>
+        <div id="content">
+            <img id="big">
+        </div>
+        <div id="control">
+            <button onClick="prevPhoto()">◀</button>
+            <button onclick="clearTimeout(st)">Pause</button> <!--소스가 짧아서 바로 넣음-->
+            <button onclick="startAuto()">Auto</button>
+            <button onclick="nextPhoto()">▶</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어게임</title>
+    <style>
+        #wapper{
+            width: 500px;
+            height: 650px;
+            background-color: yellowgreen;
+            margin:auto;    
+            border:5px solid gray
+        }
+        #word_area{
+            width: 100%;
+            height: 200px;
+            background-color: beige;
+            /*내용물의과 박스벽과의 간격 증가*/
+            padding-top: 30px;
+            box-sizing: border-box;  /*padding-top으로 인한 상단 밀리는 현상 방지*/
+            font-size: 100px;
+            text-align: center;
+        }
+        #input_area{
+            width: 100%;
+            height: 150px;
+            background-color: burlywood;
+        }
+        #input_area input{
+            width: 98.5%;
+            height: 97%;
+            font-size: 65px;
+            text-align: center;
+        }
+        #feedback_area{
+            width: 100%;
+            height: 200px;
+            background-color: rgb(163, 106, 106);
+            color: white;
+            font-size: 150px;
+            text-align: center;
+        }
+        #score_area{
+            width: 100%;
+            height: 100px;
+            background-color: rgb(70, 20, 20);
+            color: white;
+            font-size: 60px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        //게임에 사용할 단어 10개를 준비하되, 이 단어들 간의 순서가
+        //있어야 함.. 순서를 만들기 위해 배열로 선언함
+        var key_input;
+        var word_area;
+        var feedback_area;
+        var word=["파스타","오뎅","붕어빵","누룽지","오징어젓갈","김치","우동","떡볶이","연어초밥","두부튀김"];
+        var n=0;
+        var score_area;
+        var score=0;
+
+        function printWord(){
+            word_area.innerText=word[n];  //0값을 변수로 선언
+        }
+
+        function init(){
+            //프로그램에서 자주 사용될 변수들을 전역으로 빼놓자
+            key_input=document.getElementById("key_input");
+            word_area=document.getElementById("word_area");
+            feedback_area=document.getElementById("feedback_area");
+            score_area=document.getElementById("score_area");
+            
+            //프로그램이 가동되면, 제일 첫 단어가 등장
+            printWord();
+
+            //단어입력 컴포넌트에 이벤트 리스너 연결
+            key_input.addEventListener("keyup", function(e){
+                
+                //이벤트 연결을 프로그래밍적으로 할 경우,
+                //익명함수로 발생한 이벤트 정보객체인 event 객체가
+                //전달되어짐.. 따라서 그 객체를 매개변수로 아무거나
+                //사용하여 받아놓자
+                //console.log(e);
+
+                //enter를 누르면 현재 보고있는 단어의 다음 단어가 나옴
+                if(e.keyCode==13){  
+                    //보고있는 단어
+                    var text=word_area.innerText;
+                    //입력한 단어
+                    var v=key_input.value;
+
+                    if(text==v){  //보고있는 단어와 입력한 단어가 같다면
+                        n++;
+                        printWord();
+                        feedback_area.innerText="O";
+
+                        //점수 올리기
+                        score+=10;
+                        score_area.innerText=score+"점";
+                    }else{
+                        feedback_area.innerText="X";
+                    }
+                     //입력한 텍스트 초기화
+                key_input.value="";
+                }
+            });
+            //사용자들을 위해 미리 커서를 올려두자
+            key_input.focus();
+        }
+        
+        //Load: html을 모두 실행한 다음 스크립트 실행함
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wapper">
+        <div id="word_area">단어</div>
+        <div id="input_area">
+            <input type="text" id="key_input">
+        </div>
+        <div id="feedback_area">OX</div>
+        <div id="score_area">점수</div>
+    </div>
+</body>
+</html>

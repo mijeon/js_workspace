@@ -1,0 +1,84 @@
+<!-- 아래와 같이 DOCTYPE 붙으면 html5를 의미라고, html5 차세대 html로써
+스마트 폰 등의 다양한 디바이스에 호환되도록 지원-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>숙제</title>
+</head>
+<style>
+
+img{
+	width:70px;
+	position:absolute;  /*부모 요소를 기준으로 한 위치*/
+	left:0px;
+	top:0px;
+	
+}
+#content{
+	width:600px;
+	height:500px;
+	background-image:url(../images/game.jpg);
+	position:relative;  /*자식 요소를 기준으로 한 위치*/
+}
+#wrapper{
+	width:600px;
+	height:500px;
+	background:gray;
+	margin:auto;
+	position:relative;
+}
+#button{
+	width:100%;
+	height:50px;
+	background:#ccccff;
+	text-align: center;
+}
+</style>
+<script>
+var x=0;
+var flag=true;
+var st;
+
+function move(){
+	if(flag){
+	x+=10;
+	}else{
+	x-=10;
+	}	//우주선이 한계점에 도달하면 flag를 뒤집음
+		if(x==600 || x==0){
+			flag=!flag
+			}
+		document.querySelector("img").style.left=x+"px";		
+}
+
+function moveAuto(){
+	if(flag){
+	x+=10;
+	}else{
+	x-=10;
+	}	//우주선이 한계점에 도달하면 flag를 뒤집음
+		if(x==600 || x==0){
+			flag=!flag
+			}
+		document.querySelector("img").style.left=x+"px";
+		st=setTimeout("moveAuto()", 10);
+}
+function moveStop(){
+	clearTimeout(st);
+}
+</script>
+<body>
+	<div id="wrapper">
+		<div id="button">
+		<button onClick="move()">수동버튼</button>
+		<button onClick="moveAuto()">자동버튼</button>
+		<button onClick="moveStop()">정지</button>
+		</div>
+		<div id="content"><img src="../images/rocket.png"></div>
+	</div>
+		
+</body>
+</html>
+

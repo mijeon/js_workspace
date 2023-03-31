@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>과녁맞추기</title>
+    <style>
+        body{margin:0px;}
+    </style>
+    <script>
+        let wrapper;
+        let colorArray=[ "yellow", "red","powderblue", "navy", "whitesmoke"];
+        
+
+        class Circle{
+            constructor(container, x, y, width, height, bg, text, id, zIndex, textpos){
+                this.container=container; //어디에 부착할지 그 부모를 넘겨받자
+                this.x=x;
+                this.y=y;
+                this.width=width;
+                this.height=height;
+                this.bg=bg;
+                this.text=text;
+                this.id=id;
+                this.zIndex=zIndex;
+                this.textpos=textpos;
+
+                this.div=document.createElement("div");
+                this.div.id=this.id;
+                this.div.style.width=this.width+"px";
+                this.div.style.height=this.height+"px";
+                this.div.style.background=this.bg;
+                this.div.style.position="absolute";
+                this.div.style.left=this.x+"px";
+                this.div.style.top=this.y+"px";
+                this.div.style.borderRadius=50+"%";
+                this.div.style.paddingLeft=0+"px";
+                this.div.style.paddingTop=this.topPadding+"px";
+                this.div.style.zIndex=this.zIndex;
+                //this.div.innerHTML=this.text;
+                //this.div.style.boxSizing="border-box";
+                //this.div.style.verticalAlign="middle";
+                
+                console.log("zIndex is ", this.div.zIndex);
+
+                //텍스트 처리 
+                this.span=document.createElement("span");
+                this.span.style.position="absolute";
+                this.span.style.left=20+"px";
+                this.span.style.top=this.textpos+"px";
+                this.span.innerText=this.text;
+
+                this.div.appendChild(this.span);
+
+                this.container.appendChild(this.div);
+            }
+        }
+        let n=colorArray.length;
+        
+        //원 만들기
+        function createCircle(){
+            for(let i=0;i<colorArray.length;i++){
+                n--;
+                //console.log(n);
+
+                //constructor(container, x, y, width, height, bg, text, id, zIndex, textpos)
+                if(i==colorArray.length-1){
+                    new Circle(wrapper, 0 , 0, (i+1)*100, (i+1)*100, colorArray[i], (n+1)*10, i , (colorArray.length-i)+1, 200);
+                }else{
+                    new Circle(wrapper, n*50 , n*50, (i+1)*100, (i+1)*100, colorArray[i], (n+1)*10, i , (colorArray.length-i)+1, (i)*50);
+                }
+            }
+        }
+
+        function init(){
+            wrapper = document.getElementById("wrapper");
+            wrapper.style.width=500+"px";
+            wrapper.style.height=500+"px";
+            wrapper.style.border="1px solid red";
+            wrapper.style.position="relative";
+
+            createCircle();
+        }
+
+        window.addEventListener("load", function(){
+            init();
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper"></div>
+</body>
+</html>

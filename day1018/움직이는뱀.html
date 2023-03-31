@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>움직이는뱀</title>
+    <style>
+        body{
+            margin:0px;  /*4-7 바디와 문서내의 마진 제거*/
+        }  
+        #wrapper{  
+            width: 100%;
+            height: 700px;
+            border:2px solid gray;  /*5-9 백그라운드 제거*/
+        }
+    </style>
+    <script>
+        let a=0.1  //4-1 비율계수 (움직임의 부드러운 정도)
+        let targetX=0;
+        let targetY=0;
+        //4-2  createHead() 함수안에선 사용 불가능하므로 전역변수로 선언  //5-2 배열로 변경
+        let boxArray=new Array(15);   //배열의 개수를 정의했기 때문에 new Array 사용
+
+        //3 머리를 생성하여 body에 부착하자  
+        //5 머리와 몸통이 동일한 함수 사용하므로 반복문으로 개수 늘려줌
+        function createSnake(){
+            for(let i=0;i<15;i++){  //5
+                let box=document.createElement("div");  //5-4 배열에 담았기 때문에 지역변수로 재선언
+                box.style.width=50+"px";
+                box.style.height=50+"px";
+                box.style.position="absolute";
+                box.style.left=(i*25)+"px";  //5-1 머리와 몸통이 한곳에 위치하므로 초기값 변경
+                box.style.top=(i*25)+"px";  //5-1
+                //box.style.background="green";  조건문 안에 넣어줌
+
+                if(i==0){  //5-6 머리 이미지 채우기
+                    box.style.background="url(../images/snake.png)";
+                }else{
+                    box.style.background="url(../images/body.png)";
+                }
+                box.style.backgroundSize="50px 50px";  //5-7 크기 조절
+
+                //5-8 제일 먼저 생선된 요소가 z-index 수치가 0이기 때문에
+                //머리의 z-index를 거꾸로 제일 크게 처리
+                box.style.zIndex=boxArray.length-i;
+
+                //3-1
+                document.body.appendChild(box);  //body는 유일하므로 id 부여 X 
+                
+                //5-3 생성된 사각형을 배열에 담자
+                boxArray[i]=box;  // console에서 boxArray()함수가 박스가 배열에 들어있는지 확인
+            }
+        }
+        //4 머리 움직이기
+        function headMove(){
+            for(let i=0;i<boxArray.length;i++){  //5-4 전체로 움직이기  //box-> boxArray[i]로 변경
+                //머리위치=현재 머리위치+비율*(목표지점-현재 머리위치) //console에서 headMove() 함수 움직임 확인
+                boxArray[0].style.left=parseFloat(boxArray[0].style.left)+a*(targetX-parseFloat(boxArray[0].style.left))+"px";  //4-3
+                boxArray[0].style.top=parseFloat(boxArray[0].style.top)+a*(targetY-parseFloat(boxArray[0].style.top))+"px";  //4-3
+            }
+            //5-5 몸통은, tergetX, targetY를 목표지점으로 두지 않고, 
+            //자기의 바로 앞 몸통을 목표지점으로 함
+            for(let i=1;i<boxArray.length;i++){
+                boxArray[i].style.left=parseFloat(boxArray[i].style.left)+a*(parseFloat(boxArray[i-1].style.left)-parseFloat(boxArray[i].style.left))+"px";  
+                boxArray[i].style.top=parseFloat(boxArray[i].style.top)+a*(parseFloat(boxArray[i-1].style.top)-parseFloat(boxArray[i].style.top))+"px";
+            }
+        }
+        //2
+        function init(){
+            createSnake();  //3-2
+            setInterval("headMove()", 10);  //4-4
+        }
+        //1
+        window.addEventListener("load", function(){
+            init();
+            //4-5 body에 마우스 이벤트 연결
+            document.body.addEventListener("mousedown", function(e){
+                //console.log("마우스 x 좌표", e.clientX);  
+                //4-8 목표지점을 마우스 좌표와 일치시킴
+                targetX=e.clientX;  
+                targetY=e.clientY;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="wrapper"></div>  <!--4-6 box 외 빈 공간은 마우스로 인식 불가하므로 wrapper를 줌-->
+</body>
+</html>
